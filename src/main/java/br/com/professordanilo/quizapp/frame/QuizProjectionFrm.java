@@ -66,7 +66,7 @@ public class QuizProjectionFrm extends JFrame {
         panelQuiz.add(panelCompetidores, BorderLayout.EAST);
 
         add(panelQuiz);
-        startWaitPanel();
+//        startWaitPanel();
     }
     
     private void createPanelHead(){
@@ -84,13 +84,14 @@ public class QuizProjectionFrm extends JFrame {
     }
     
     private void createPanelPlayers(){
-        panelCompetidores = new JPanel(new FlowLayout());
+        panelCompetidores = new JPanel(new GridLayout(2, 2));
+        panelCompetidores.setBackground(new Color(240, 240, 240));
         panelCompetidores.setOpaque(true);
-        panelCompetidores.setBackground(Color.white);
-        panelCompetidores.add(new JLabel("Danilo Souza Almeida"));
+//        panelCompetidores.setBackground(Color.white);
         panelCompetidores.add(new JLabel(new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-male.png"))));
-        panelCompetidores.add(new JLabel("Nayara Gabriela"));
+        panelCompetidores.add(new JLabel("Danilo Souza Almeida"));
         panelCompetidores.add(new JLabel(new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-female.png"))));
+        panelCompetidores.add(new JLabel("Nayara Gabriela"));
     }
     
     private void createWaitPanel(){
