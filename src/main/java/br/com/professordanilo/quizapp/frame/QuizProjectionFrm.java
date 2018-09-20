@@ -10,8 +10,13 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,6 +45,7 @@ public class QuizProjectionFrm extends JFrame {
         createPainelQuizQuestions();
         createWaitPanel();
         configLayout();
+//        startWaitPanel();
     }
 
     private void createPainelQuizQuestions(){
@@ -54,6 +60,15 @@ public class QuizProjectionFrm extends JFrame {
         panelQuestoes.setBackground(Color.white);
         panelQuestoes.setPreferredSize(new Dimension(getWidth(), getHeight()));
         panelQuestoes.add(questao, BorderLayout.CENTER);
+        JButton botao = new JButton("Clique aqui");
+        botao.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startWaitPanel();
+            }
+        });
+        
+        panelQuestoes.add(botao);
 
         
         createPanelHead();
@@ -98,6 +113,30 @@ public class QuizProjectionFrm extends JFrame {
         panelAguardando = new JPanel(new BorderLayout());
 
         JLabel aguarde = new JLabel("Aguardando a pergunta...");
+        aguarde.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                stopWaitPanel();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
         
         aguarde.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
         aguarde.setOpaque(true);
