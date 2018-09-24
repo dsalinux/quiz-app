@@ -1,5 +1,6 @@
 package br.com.professordanilo.quizapp.frame;
 
+import br.com.professordanilo.quizapp.util.AppIcons;
 import br.com.professordanilo.quizapp.util.ImageUtil;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -19,7 +20,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,10 +30,6 @@ import javax.swing.border.MatteBorder;
 public class QuizProjectionFrm extends JFrame {
 
     private static final String TITLE = "Quiz";
-
-    private final Icon ICON_MALE = new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-male.png"));
-    private final Icon ICON_FEMALE = new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-female.png"));
-    private final Icon ICON_GROUP = new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-group.png"));
 
     private JLabel questao = new JLabel();
     private JLabel[] respostas = new JLabel[]{new JLabel(), new JLabel()};
@@ -129,7 +125,7 @@ public class QuizProjectionFrm extends JFrame {
 //        panelInfoPlayers.add(iconPlayer1);
 
         JLabel player1 = new JLabel("<html><body><h2>Danilo Souza Almeida</h2></body></html>");
-        player1.setIcon(ICON_MALE);
+        player1.setIcon(AppIcons.ICON_MALE);
         player1.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.green));
         player1.setPreferredSize(new Dimension(300, 100));
         player1.setHorizontalAlignment(JLabel.CENTER);
@@ -138,7 +134,7 @@ public class QuizProjectionFrm extends JFrame {
         panelInfoPlayers.add(player1);
         JLabel player2 = new JLabel("<html><body><h2>Nayara Gabriella</h2></body></html>");
         player2.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.ORANGE));
-        player2.setIcon(ICON_FEMALE);
+        player2.setIcon(AppIcons.ICON_FEMALE);
         player2.setHorizontalAlignment(JLabel.CENTER);
         player2.setHorizontalTextPosition(JLabel.CENTER);
         player2.setVerticalTextPosition(JLabel.BOTTOM);

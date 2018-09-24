@@ -17,7 +17,7 @@ public class Event {
     private Integer id;
     private String name;
     private Byte[] logo;
-    private Integer responseTime;
+    private Integer stopwatch;
     private TypeCompetidor typeCompetidor;
     private List<Player> players;
 
@@ -61,12 +61,12 @@ public class Event {
         this.logo = logo;
     }
 
-    public Integer getResponseTime() {
-        return responseTime;
+    public Integer getStopwatch() {
+        return stopwatch;
     }
 
-    public void setResponseTime(Integer responseTime) {
-        this.responseTime = responseTime;
+    public void setStopwatch(Integer stopwatch) {
+        this.stopwatch = stopwatch;
     }
 
     public TypeCompetidor getTypeCompetidor() {
