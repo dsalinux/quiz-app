@@ -1,31 +1,39 @@
 package br.com.professordanilo.quizapp.frame;
 
+import br.com.professordanilo.quizapp.util.ImageUtil;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Insets;
-import java.awt.Label;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import javax.swing.BorderFactory;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 public class QuizProjectionFrm extends JFrame {
 
     private static final String TITLE = "Quiz";
+
+    private final Icon ICON_MALE = new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-male.png"));
+    private final Icon ICON_FEMALE = new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-female.png"));
+    private final Icon ICON_GROUP = new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-group.png"));
 
     private JLabel questao = new JLabel();
     private JLabel[] respostas = new JLabel[]{new JLabel(), new JLabel()};
@@ -33,22 +41,28 @@ public class QuizProjectionFrm extends JFrame {
     private JPanel panelAguardando;
 
     private JPanel panelQuestoes;
-    private JPanel panelCompetidores;
+    private JPanel panelInfoPlayers;
     private JPanel panelCabecalho;
     private JPanel panelQuiz;
+
+    private enum FrameState {
+        WAIT,
+        QUESTION,
+        RESULT
+    }
 
     public QuizProjectionFrm() throws HeadlessException {
         super(TITLE);
         setLayout(new BorderLayout());
 //        setPreferredSize(new Dimension(400, 300));
-        
+
         createPainelQuizQuestions();
         createWaitPanel();
         configLayout();
 //        startWaitPanel();
     }
 
-    private void createPainelQuizQuestions(){
+    private void createPainelQuizQuestions() {
         panelQuiz = new JPanel(new BorderLayout());
         panelQuiz.setPreferredSize(getPreferredSize());
         questao.setText("Questão");
@@ -67,93 +81,102 @@ public class QuizProjectionFrm extends JFrame {
                 startWaitPanel();
             }
         });
-        
+
         panelQuestoes.add(botao);
 
-        
-        createPanelHead();
+//        createPanelHead();
         createPanelPlayers();
         createWaitPanel();
-        
 
-        panelQuiz.add(panelCabecalho, BorderLayout.NORTH);
+        configLayout();
+
         panelQuiz.add(panelQuestoes, BorderLayout.CENTER);
-        panelQuiz.add(panelCompetidores, BorderLayout.EAST);
 
         add(panelQuiz);
 //        startWaitPanel();
     }
-    
-    private void createPanelHead(){
-        panelCabecalho = new JPanel(new GridBagLayout());
-        panelCabecalho.setPreferredSize(new Dimension(300, 130));
-        panelCabecalho.setOpaque(true);
-        panelCabecalho.setBackground(Color.white);
-        MatteBorder linha = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.lightGray);
-        panelCabecalho.setBorder(linha);
-        ImageIcon image = new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/logo.png"));
-        JLabel jLabel = new JLabel(image);
-        jLabel.setIconTextGap(JLabel.CENTER);
-        jLabel.setHorizontalAlignment(JLabel.CENTER);
-        panelCabecalho.add(jLabel);
+
+    private void createPanelHead(JPanel panel) {
+        try {
+            panelCabecalho = new JPanel(new GridBagLayout());
+            panelCabecalho.setPreferredSize(new Dimension(300, 130));
+            panelCabecalho.setOpaque(true);
+            panelCabecalho.setBackground(Color.white);
+            panelCabecalho.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.lightGray));
+//            MatteBorder linha = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.lightGray);
+//            panelCabecalho.setBorder(linha);
+            BufferedImage bImage = ImageIO.read(getClass().getResource("/br/com/professordanilo/quizapp/images/logo.png"));
+//            ImageIcon image = new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/logo.png"));
+            JLabel eventIcon = new JLabel(new ImageIcon(ImageUtil.resizeToMaxValue(bImage, 260, 260)));
+            eventIcon.setHorizontalAlignment(JLabel.CENTER);
+            eventIcon.setHorizontalAlignment(JLabel.CENTER);
+            panelCabecalho.add(eventIcon);
+            panel.add(panelCabecalho, BorderLayout.NORTH);
+        } catch (IOException ex) {
+            Logger.getLogger(QuizProjectionFrm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    private void createPanelPlayers(){
-        panelCompetidores = new JPanel(new GridLayout(2, 2));
-        panelCompetidores.setBackground(new Color(240, 240, 240));
-        panelCompetidores.setOpaque(true);
+
+    private void createPanelPlayers() {
+        panelInfoPlayers = new JPanel(new GridLayout(3, 1));
+        panelInfoPlayers.setBackground(new Color(240, 240, 240));
+        panelInfoPlayers.setOpaque(true);
+        createPanelHead(panelInfoPlayers);
 //        panelCompetidores.setBackground(Color.white);
-        panelCompetidores.add(new JLabel(new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-male.png"))));
-        panelCompetidores.add(new JLabel("Danilo Souza Almeida"));
-        panelCompetidores.add(new JLabel(new ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-female.png"))));
-        panelCompetidores.add(new JLabel("Nayara Gabriela"));
+//        JLabel iconPlayer1 = new JLabel();
+//        iconPlayer1.setPreferredSize(new Dimension(50, 50));
+//        iconPlayer1.setBorder(new LineBorder(Color.blue));
+//        panelInfoPlayers.add(iconPlayer1);
+
+        JLabel player1 = new JLabel("<html><body><h2>Danilo Souza Almeida</h2></body></html>");
+        player1.setIcon(ICON_MALE);
+        player1.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.green));
+        player1.setPreferredSize(new Dimension(300, 100));
+        player1.setHorizontalAlignment(JLabel.CENTER);
+        player1.setHorizontalTextPosition(JLabel.CENTER);
+        player1.setVerticalTextPosition(JLabel.BOTTOM);
+        panelInfoPlayers.add(player1);
+        JLabel player2 = new JLabel("<html><body><h2>Nayara Gabriella</h2></body></html>");
+        player2.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.ORANGE));
+        player2.setIcon(ICON_FEMALE);
+        player2.setHorizontalAlignment(JLabel.CENTER);
+        player2.setHorizontalTextPosition(JLabel.CENTER);
+        player2.setVerticalTextPosition(JLabel.BOTTOM);
+        panelInfoPlayers.add(player2);
+        panelQuiz.add(panelInfoPlayers, BorderLayout.EAST);
     }
-    
-    private void createWaitPanel(){
-        panelAguardando = new JPanel(new BorderLayout());
 
-        JLabel aguarde = new JLabel("Aguardando a pergunta...");
-        aguarde.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+    private void createWaitPanel() {
+        try {
+            panelAguardando = new JPanel(new BorderLayout());
+            
+            JLabel aguarde = new JLabel("Aguardando a pergunta...");
+            
+            aguarde.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
+            aguarde.setOpaque(true);
+            aguarde.setBackground(Color.white);
+            aguarde.setHorizontalAlignment(JLabel.CENTER);
+            aguarde.setHorizontalTextPosition(JLabel.CENTER);
+            aguarde.setVerticalTextPosition(JLabel.BOTTOM);
+            
+            BufferedImage bImage = ImageIO.read(getClass().getResource("/br/com/professordanilo/quizapp/images/logo.png"));
+            aguarde.setIcon(new ImageIcon(ImageUtil.resizeToMaxValue(bImage, 260, 260)));
+            
+            panelAguardando.add(aguarde, BorderLayout.CENTER);
+            
+            RainbowPanel panelAnimationTop = new RainbowPanel(new Dimension(100, 80));
+            RainbowPanel panelAnimationBottom = new RainbowPanel(new Dimension(100, 80));
+            panelAguardando.add(panelAnimationTop, BorderLayout.NORTH);
+            panelAguardando.add(panelAnimationBottom, BorderLayout.SOUTH);
+            panelAnimationTop.startAnimation();
+            panelAnimationBottom.startAnimation();
+            panelAguardando.setVisible(false);
+        } catch (IOException ex) {
+            Logger.getLogger(QuizProjectionFrm.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                stopWaitPanel();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-        
-        aguarde.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
-        aguarde.setOpaque(true);
-        aguarde.setBackground(Color.white);
-        aguarde.setHorizontalAlignment(JLabel.CENTER);
-        panelAguardando.add(aguarde, BorderLayout.CENTER);
-
-        RainbowPanel panelAnimationTop = new RainbowPanel(new Dimension(100, 80));
-        RainbowPanel panelAnimationBottom = new RainbowPanel(new Dimension(100, 80));
-        panelAguardando.add(panelAnimationTop, BorderLayout.NORTH);
-        panelAguardando.add(panelAnimationBottom, BorderLayout.SOUTH);
-        panelAnimationTop.startAnimation();
-        panelAnimationBottom.startAnimation();
-        panelAguardando.setVisible(false);
-        
     }
-    
+
     private void startWaitPanel() {
         add(panelAguardando);
         panelQuiz.setVisible(false);
@@ -168,12 +191,37 @@ public class QuizProjectionFrm extends JFrame {
 
     private void configLayout() {
         setExtendedState(MAXIMIZED_BOTH);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setPreferredSize(new Dimension(600, 300));
         pack();
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    dispose();
+                }
+                return false;
+            }
+        });
+
+//        addKeyListener(new KeyAdapter() {
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+//                System.out.println(e.getKeyCode());
+//                 if(KeyEvent.VK_ESCAPE == e.getKeyCode()){
+//                     System.out.println("Escape");
+//                 }
+//            }
+//            
+//        });
     }
 
     public static void main(String[] args) {
-        new QuizProjectionFrm().setVisible(true);
+        QuizProjectionFrm frame = new QuizProjectionFrm();
+        frame.setVisible(true);
+
+
     }
 
 }

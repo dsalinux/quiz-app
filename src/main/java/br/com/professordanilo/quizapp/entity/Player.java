@@ -1,14 +1,15 @@
 package br.com.professordanilo.quizapp.entity;
 
-import java.util.List;
+import br.com.professordanilo.quizapp.constant.PlayerType;
 import java.util.Objects;
 
-public class Equipe {
+public class Player {
 
     private Integer id;
-    private String nome;
-    private List<Competidor> competidores;
-
+    private String name;
+    private PlayerType playerType;
+    private Event event;
+    
     public Integer getId() {
         return id;
     }
@@ -17,20 +18,12 @@ public class Equipe {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public List<Competidor> getCompetidores() {
-        return competidores;
-    }
-
-    public void setCompetidores(List<Competidor> competidores) {
-        this.competidores = competidores;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -51,7 +44,7 @@ public class Equipe {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Equipe other = (Equipe) obj;
+        final Player other = (Player) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -60,7 +53,7 @@ public class Equipe {
 
     @Override
     public String toString() {
-        return nome;
+        return name;
     }
     
     
