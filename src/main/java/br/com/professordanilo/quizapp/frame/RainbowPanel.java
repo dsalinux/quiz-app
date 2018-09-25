@@ -87,7 +87,7 @@ public class RainbowPanel extends JLabel {
     }
     
     private void addColor(){
-        if(animationTimer.isRunning())
+        if(animationTimer != null && animationTimer.isRunning())
         switch (corAtual){
             case 1://aumenta vermelho
                 r++;

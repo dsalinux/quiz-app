@@ -7,14 +7,17 @@ package br.com.professordanilo.quizapp.frame;
 
 import br.com.professordanilo.quizapp.util.AppIcons;
 import br.com.professordanilo.quizapp.util.ImageUtil;
-import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -38,11 +41,23 @@ public class QuizManager extends javax.swing.JFrame {
         }
         ComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(displays);
         cboDevices.setModel(boxModel);
-        selecionarLogoOriginal();
+        selectOriginalLogo();
     }
 
-    private void selecionarLogoOriginal() {
+    private void selectOriginalLogo() {
         lblViewLogo.setIcon(new ImageIcon(ImageUtil.resizeToMaxValue(AppIcons.DEFAULT_LOGO_BUFFERED, 100, 100)));
+    }
+    private void selectNewLogo(){
+        JFileChooser chooser = new JFileChooser();
+        int retorno = chooser.showOpenDialog(rootPane);
+        if(retorno == 0){
+            try {
+                File fileSelected = chooser.getSelectedFile();
+                lblViewLogo.setIcon(new ImageIcon(ImageUtil.resizeToMaxValue(ImageIO.read(fileSelected), 100, 100)));
+            } catch (IOException ex) {
+                Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -81,7 +96,7 @@ public class QuizManager extends javax.swing.JFrame {
         rbSingle = new javax.swing.JRadioButton();
         rbGroup = new javax.swing.JRadioButton();
         jPanel8 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
+        btnSelectLogo = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         lblViewLogo = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
@@ -94,6 +109,7 @@ public class QuizManager extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        menuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -255,8 +271,13 @@ public class QuizManager extends javax.swing.JFrame {
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Logo para projeção"));
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/dialog-ok.png"))); // NOI18N
-        jButton3.setText("Selecionar Logo");
+        btnSelectLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/dialog-ok.png"))); // NOI18N
+        btnSelectLogo.setText("Selecionar Logo");
+        btnSelectLogo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectLogoActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/draw-eraser.png"))); // NOI18N
         jButton4.setText("Logo Padrão");
@@ -273,7 +294,7 @@ public class QuizManager extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                    .addComponent(btnSelectLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblViewLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,7 +307,7 @@ public class QuizManager extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblViewLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jButton3)
+                        .addComponent(btnSelectLogo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -438,7 +459,16 @@ public class QuizManager extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Sobre");
+
+        menuAbout.setText("Sobre o App");
+        menuAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAboutActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuAbout);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -469,6 +499,7 @@ public class QuizManager extends javax.swing.JFrame {
         }
         if (chkFullscreen.isSelected()) {
             Integer deviceSelecionado = Integer.parseInt(((String) cboDevices.getSelectedItem()).substring(8)) - 1;
+            JOptionPane.showMessageDialog(rootPane, deviceSelecionado);
             devices[deviceSelecionado].setFullScreenWindow(quizProjectionFrm);
 
         } else {
@@ -488,6 +519,14 @@ public class QuizManager extends javax.swing.JFrame {
     private void btnNewEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewEventActionPerformed
         tabPaneQuiz.setSelectedIndex(1);
     }//GEN-LAST:event_btnNewEventActionPerformed
+
+    private void btnSelectLogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectLogoActionPerformed
+        selectNewLogo();
+    }//GEN-LAST:event_btnSelectLogoActionPerformed
+
+    private void menuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAboutActionPerformed
+        new AboutFrm(rootPane).setVisible(true);
+    }//GEN-LAST:event_menuAboutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -529,6 +568,7 @@ public class QuizManager extends javax.swing.JFrame {
     private javax.swing.JButton btnNewEvent;
     private javax.swing.JButton btnNewPlayer;
     private javax.swing.JButton btnSelectEvent;
+    private javax.swing.JButton btnSelectLogo;
     private javax.swing.JButton btnStartProjection;
     private javax.swing.JButton btnStopProjection;
     private javax.swing.JComboBox<String> cboDevices;
@@ -536,7 +576,6 @@ public class QuizManager extends javax.swing.JFrame {
     private javax.swing.ButtonGroup groupCompetidor;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -558,6 +597,7 @@ public class QuizManager extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblViewLogo;
+    private javax.swing.JMenuItem menuAbout;
     private javax.swing.JRadioButton rbGroup;
     private javax.swing.JRadioButton rbSingle;
     private javax.swing.JSpinner spinStopwatch;

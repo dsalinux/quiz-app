@@ -20,8 +20,18 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Edit"/>
+            <Property name="text" type="java.lang.String" value="Sobre"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="menuAbout">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Sobre o App"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuAboutActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>
@@ -457,7 +467,7 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jButton3" pref="126" max="32767" attributes="0"/>
+                                  <Component id="btnSelectLogo" pref="126" max="32767" attributes="0"/>
                                   <Component id="jButton4" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -473,7 +483,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lblViewLogo" min="-2" pref="113" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnSelectLogo" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jButton4" min="-2" max="-2" attributes="0"/>
                                   </Group>
@@ -484,13 +494,16 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JButton" name="jButton3">
+                    <Component class="javax.swing.JButton" name="btnSelectLogo">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/br/com/professordanilo/quizapp/images/dialog-ok.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Selecionar Logo"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectLogoActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton4">
                       <Properties>
