@@ -51,7 +51,7 @@ public class AboutFrm extends javax.swing.JDialog {
         jTextArea1.setRows(5);
         jTextArea1.setText("Aplicativo para organização de Quiz similar ao show do milhão e passa ou repassa.\n\nApp desenvolvido por Danilo Souza Almeida (dsalinux@gmail.com).");
         jTextArea1.setWrapStyleWord(true);
-        jTextArea1.setBorder(null);
+        jTextArea1.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 15, 15, 15));
         jTextArea1.setFocusable(false);
         jScrollPane1.setViewportView(jTextArea1);
 

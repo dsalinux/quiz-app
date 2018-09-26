@@ -19,6 +19,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -49,6 +50,9 @@ public class QuizManager extends javax.swing.JFrame {
     }
     private void selectNewLogo(){
         JFileChooser chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(false);
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Imagens", ImageIO.getReaderFileSuffixes()));
+        chooser.setAcceptAllFileFilterUsed(false);
         int retorno = chooser.showOpenDialog(rootPane);
         if(retorno == 0){
             try {
