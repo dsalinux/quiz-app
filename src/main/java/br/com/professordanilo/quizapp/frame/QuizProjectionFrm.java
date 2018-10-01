@@ -1,7 +1,9 @@
 package br.com.professordanilo.quizapp.frame;
 
+import br.com.professordanilo.quizapp.entity.Question;
 import br.com.professordanilo.quizapp.util.AppIcons;
 import br.com.professordanilo.quizapp.util.ImageUtil;
+import br.com.professordanilo.quizapp.util.exception.BusinessException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -40,8 +42,11 @@ public class QuizProjectionFrm extends JFrame {
     private JPanel panelInfoPlayers;
     private JPanel panelCabecalho;
     private JPanel panelQuiz;
+    private FrameState frameState;
+    
+    private Question question;
 
-    private enum FrameState {
+    public enum FrameState {
         WAIT,
         QUESTION,
         RESULT
@@ -213,11 +218,34 @@ public class QuizProjectionFrm extends JFrame {
 //        });
     }
 
-    public static void main(String[] args) {
-        QuizProjectionFrm frame = new QuizProjectionFrm();
-        frame.setVisible(true);
-
-
+    public void startProjectionQuest(Question question){
+        frameState = FrameState.QUESTION;
+    }
+    public void startProjectionAnswer() throws BusinessException {
+        if(question == null){
+            throw new BusinessException("Questão não enviada para projeção.");
+        }
+        frameState = FrameState.RESULT;
+    }
+    
+    public void stopProjectionQuest(Question question){
+        frameState = FrameState.WAIT;
     }
 
+    public FrameState getFrameState() {
+        return frameState;
+    }
+    
+    private void changeFrameState(FrameState frameState){
+        this.frameState = frameState;
+        switch(frameState){
+            case QUESTION:
+                break;
+            case RESULT:
+                break;
+            case WAIT:
+                break;
+        }
+    }
+    
 }

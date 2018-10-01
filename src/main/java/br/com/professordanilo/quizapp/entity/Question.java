@@ -1,20 +1,23 @@
 package br.com.professordanilo.quizapp.entity;
 
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
 
-/**
- *
- * @author danilo
- */
+@Entity
 public class Question {
 
+    @Id
+    @GenericGenerator(name = "generator", strategy = "increment")
+    @GeneratedValue(generator = "generator")
     private Integer id;
     private String question;
     private String falseAnswer1;
     private String falseAnswer2;
     private String falseAnswer3;
-    private String falseAnswer4;
-    private Integer trueAnswer;
+    private String trueAnswer;
     private String subject;
     private boolean selected;
 
@@ -58,19 +61,11 @@ public class Question {
         this.falseAnswer3 = falseAnswer3;
     }
 
-    public String getFalseAnswer4() {
-        return falseAnswer4;
-    }
-
-    public void setFalseAnswer4(String falseAnswer4) {
-        this.falseAnswer4 = falseAnswer4;
-    }
-
-    public Integer getTrueAnswer() {
+    public String getTrueAnswer() {
         return trueAnswer;
     }
 
-    public void setTrueAnswer(Integer trueAnswer) {
+    public void setTrueAnswer(String trueAnswer) {
         this.trueAnswer = trueAnswer;
     }
 
@@ -114,7 +109,5 @@ public class Question {
         }
         return true;
     }
-    
-    
 
 }

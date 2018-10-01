@@ -1,15 +1,24 @@
 package br.com.professordanilo.quizapp.entity;
 
-import br.com.professordanilo.quizapp.constant.PlayerType;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
 
+@Entity
+@Table
 public class Player {
 
+    @GenericGenerator(name = "generator", strategy = "increment")
+    @GeneratedValue(generator = "generator")
+    @Id
     private Integer id;
     private String name;
-    private PlayerType playerType;
-    private Event event;
-    
+//    private PlayerType playerType;
+//    private Event event;
+
     public Integer getId() {
         return id;
     }
@@ -55,7 +64,5 @@ public class Player {
     public String toString() {
         return name;
     }
-    
-    
-    
+
 }

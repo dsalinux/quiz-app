@@ -6,23 +6,21 @@
 package br.com.professordanilo.quizapp;
 
 import br.com.professordanilo.quizapp.frame.QuizManager;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author danilo
  */
 public class Main {
-    
+    private static final Logger logger = LogManager.getLogger(Main.class.getName());
     public static void main(String[] args) {
         try {
             Map<String, LookAndFeelInfo> lafs = new HashMap<>();
@@ -46,9 +44,10 @@ public class Main {
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(QuizManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } 
-        new QuizManager().setVisible(true);
+        logger.log(Level.ERROR, "testes");
+        logger.error("Erros de testes");
+//        new QuizManager().setVisible(true);
     }
     
 }
