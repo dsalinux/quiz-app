@@ -25,7 +25,7 @@ public class Main {
         try {
             Map<String, LookAndFeelInfo> lafs = new HashMap<>();
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                System.out.println(info.getName());
+                System.out.println(info);
                 if ("GTK+".equals(info.getName())) {
                     lafs.put("GTK+",info);
                 } else if("Nimbus".equals(info.getName())){
@@ -47,7 +47,7 @@ public class Main {
         } 
         logger.log(Level.ERROR, "testes");
         logger.error("Erros de testes");
-//        new QuizManager().setVisible(true);
+        new QuizManager().setVisible(true);
     }
     
 }
