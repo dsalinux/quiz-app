@@ -1,6 +1,7 @@
 package br.com.professordanilo.quizapp.logic;
 
 import br.com.professordanilo.quizapp.entity.Player;
+import br.com.professordanilo.quizapp.util.ContextDAO;
 import br.com.professordanilo.quizapp.util.exception.BusinessException;
 import br.com.professordanilo.quizapp.util.exception.SystemException;
 import java.io.Serializable;
@@ -10,7 +11,8 @@ public class PlayerLogic implements GenericLogic<Player, Integer>{
 
     @Override
     public Player save(Player entity) throws BusinessException, SystemException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        entity = ContextDAO.getPlayerDAO().save(entity);
+        return entity;
     }
 
     @Override
