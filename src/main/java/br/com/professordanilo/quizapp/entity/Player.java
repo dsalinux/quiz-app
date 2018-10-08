@@ -19,6 +19,13 @@ public class Player {
 //    private PlayerType playerType;
 //    private Event event;
 
+    public Player() {
+    }
+
+    public Player(Integer id) {
+        this.id = id;
+    }
+    
     public Integer getId() {
         return id;
     }

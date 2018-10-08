@@ -36,9 +36,9 @@ public class GenericDAO<T, I extends Serializable> {
     }
     
     public void initializer(List<T> entitys){
-        for (T entity : entitys) {
+        entitys.forEach((entity) -> {
             Hibernate.initialize(entity);
-        }
+        });
     }
     
     public T findById(I id) {

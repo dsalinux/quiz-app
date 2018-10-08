@@ -10,7 +10,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <log4j.version>2.11.1</log4j.version>
+        <log4j.version>2.7</log4j.version>
         <sqlite.dialect.version>1.0</sqlite.dialect.version>
         <sqlite.jdbc.version>3.23.1</sqlite.jdbc.version>
         <hibernate.version>5.3.6.Final</hibernate.version>
@@ -32,20 +32,65 @@
         <dependency>
             <groupId>com.zsoltfabok</groupId>
             <artifactId>sqlite-dialect</artifactId>
+            <scope>compile</scope>
             <version>${sqlite.dialect.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.7</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.7</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.9.7</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.java</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <!--<targetPath>META-INF/</targetPath>-->
+            </resource>
+            <resource>
+                <directory>${project.build.directory}/dependency/</directory>
+                <includes>
+                    <include>*.jar</include>
+                </includes>
+                <targetPath>lib/</targetPath>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

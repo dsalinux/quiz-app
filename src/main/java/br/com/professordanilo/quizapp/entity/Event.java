@@ -22,11 +22,20 @@ public class Event {
     private Integer id;
     private String name;
     private byte[] logo;
-    private Integer stopwatch;
+    private Integer stopwatch = 5;
     @Enumerated(EnumType.STRING)
-    private TypeCompetidor typeCompetidor;
+    private TypeCompetidor typeCompetidor = TypeCompetidor.GROUP;
 //    private List<Player> players;
 
+    public Event() {
+    }
+
+    public Event(Integer id) {
+        this.id = id;
+    }
+
+    
+    
     public enum TypeCompetidor {
         GROUP("Em Grupo"),
         SINGLE("Individual");
@@ -115,5 +124,12 @@ public class Event {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+    
+    
 
 }

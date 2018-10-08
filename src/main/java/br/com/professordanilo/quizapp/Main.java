@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,12 +19,11 @@ import org.apache.logging.log4j.Logger;
  * @author danilo
  */
 public class Main {
-    private static final Logger logger = LogManager.getLogger(Main.class.getName());
     public static void main(String[] args) {
+        Logger logger = LogManager.getLogger(Main.class.getPackage().getName());
         try {
             Map<String, LookAndFeelInfo> lafs = new HashMap<>();
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                System.out.println(info);
                 if ("GTK+".equals(info.getName())) {
                     lafs.put("GTK+",info);
                 } else if("Nimbus".equals(info.getName())){
@@ -45,9 +43,13 @@ public class Main {
             java.util.logging.Logger.getLogger(QuizManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (UnsupportedLookAndFeelException ex) {
         } 
-        logger.log(Level.ERROR, "testes");
+        logger.info("testes");
         logger.error("Erros de testes");
-        new QuizManager().setVisible(true);
+        try {
+           new QuizManager().setVisible(true);
+        } catch(Exception e){
+            logger.error(e);
+        }
     }
     
 }
