@@ -95,7 +95,6 @@ public class QuizManager extends javax.swing.JFrame {
 
     private void selectOriginalLogo() {
         lblViewLogo.setIcon(new ImageIcon(ImageUtil.resizeToMaxValue(AppIcons.DEFAULT_LOGO_BUFFERED, 100, 100)));
-        throw new RuntimeException("Erro logo");
     }
 
     private void selectNewLogo() {

@@ -16,14 +16,14 @@
         </RollingFile>
  
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout   pattern="%sn %d{yyyy/MM/dd HH:mm:ss,SSS} %r [%-6p] [%t] %c{3} %C{3}.%M(%F:%L) – %m%n %throwable" />
+            <PatternLayout   pattern="%sn %d{yyyy/MM/dd HH:mm:ss,SSS} %r [%-6p] [%t] %c{3} %C{3}.%M(%F:%L) – %m%n%throwable" />
         </Console>
     </Appenders>
     <Loggers>
         <Logger name="com.howtodoinjava" level="debug" additivity="true">
-            <appender-ref ref="fileLogger" level="warn2" />
+            <appender-ref ref="fileLogger" level="debug" />
         </Logger>
-        <Root level="warn" additivity="true">
+        <Root level="debug" additivity="true">
             <appender-ref ref="fileLogger" />
             <appender-ref ref="console" />
         </Root>
