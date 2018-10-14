@@ -1,23 +1,30 @@
 package br.com.professordanilo.quizapp.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table
-public class Player {
+public class Player implements Serializable {
+
+    private static final long serialVersionUID = -1109519862736493611L;
 
     @GenericGenerator(name = "generator", strategy = "increment")
     @GeneratedValue(generator = "generator")
     @Id
     private Integer id;
     private String name;
+    @ManyToOne
+    @JoinColumn(name="tournament_id", nullable=false)
+    private Tournament tournament;
 //    private PlayerType playerType;
-//    private Event event;
 
     public Player() {
     }
@@ -42,6 +49,14 @@ public class Player {
         this.name = name;
     }
 
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;

@@ -8,10 +8,11 @@
     <property name="hibernate.connection.url">jdbc:sqlite:./teste.sqlite</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">root</property>
+    <property name="hibernate.hbm2ddl.auto">create</property>
     
-    
-    <mapping class="br.com.professordanilo.quizapp.entity.Player"/>
     <mapping class="br.com.professordanilo.quizapp.entity.Event"/>
+    <mapping class="br.com.professordanilo.quizapp.entity.Fight"/>
+    <mapping class="br.com.professordanilo.quizapp.entity.Player"/>
     <mapping class="br.com.professordanilo.quizapp.entity.Question"/>
     
   </session-factory>

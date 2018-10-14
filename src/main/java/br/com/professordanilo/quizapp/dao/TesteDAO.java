@@ -35,8 +35,8 @@ public class TesteDAO {
             byte[] imageInByte = baos.toByteArray();
             event.setLogo(imageInByte);
             event.setName("Semana Nacional de Ciência e tecnologia 2018");
-            event.setStopwatch(5);
-            event.setTypeCompetidor(Event.TypeCompetidor.SINGLE);
+//            event.setStopwatch(5);
+//            event.setTypeCompetidor(Event.TypeCompetidor.SINGLE);
             eventDAO.save(event);
             
             Question question = new Question();

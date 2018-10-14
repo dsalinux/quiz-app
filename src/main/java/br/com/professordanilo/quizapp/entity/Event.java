@@ -5,6 +5,7 @@
  */
 package br.com.professordanilo.quizapp.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,7 +15,9 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Event {
+public class Event implements Serializable {
+
+    private static final long serialVersionUID = -8385478751024702728L;
 
     @Id
     @GenericGenerator(name = "generator", strategy = "increment")
@@ -22,9 +25,7 @@ public class Event {
     private Integer id;
     private String name;
     private byte[] logo;
-    private Integer stopwatch = 5;
-    @Enumerated(EnumType.STRING)
-    private TypeCompetidor typeCompetidor = TypeCompetidor.GROUP;
+
 //    private List<Player> players;
 
     public Event() {
@@ -32,24 +33,6 @@ public class Event {
 
     public Event(Integer id) {
         this.id = id;
-    }
-
-    
-    
-    public enum TypeCompetidor {
-        GROUP("Em Grupo"),
-        SINGLE("Individual");
-
-        private String description;
-
-        TypeCompetidor(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
     }
 
     public Integer getId() {
@@ -74,22 +57,6 @@ public class Event {
 
     public void setLogo(byte[] logo) {
         this.logo = logo;
-    }
-
-    public Integer getStopwatch() {
-        return stopwatch;
-    }
-
-    public void setStopwatch(Integer stopwatch) {
-        this.stopwatch = stopwatch;
-    }
-
-    public TypeCompetidor getTypeCompetidor() {
-        return typeCompetidor;
-    }
-
-    public void setTypeCompetidor(TypeCompetidor typeCompetidor) {
-        this.typeCompetidor = typeCompetidor;
     }
 
 //    public List<Player> getPlayers() {
