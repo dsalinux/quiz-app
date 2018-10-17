@@ -6,12 +6,14 @@
 package br.com.professordanilo.quizapp.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -25,7 +27,9 @@ public class Event implements Serializable {
     private Integer id;
     private String name;
     private byte[] logo;
-
+    @OneToMany(mappedBy = "event")
+    private List<Tournament> tournaments;
+    
 //    private List<Player> players;
 
     public Event() {
@@ -59,13 +63,13 @@ public class Event implements Serializable {
         this.logo = logo;
     }
 
-//    public List<Player> getPlayers() {
-//        return players;
-//    }
-//
-//    public void setPlayers(List<Player> players) {
-//        this.players = players;
-//    }
+    public List<Tournament> getTournaments() {
+        return tournaments;
+    }
+
+    public void setTournaments(List<Tournament> tournaments) {
+        this.tournaments = tournaments;
+    }
 
     @Override
     public int hashCode() {

@@ -8,6 +8,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -26,6 +28,10 @@ public class Tournament implements Serializable {
     private TypeCompetidor typeCompetidor = TypeCompetidor.GROUP;
     @OneToMany(mappedBy = "tournament")
     private List<Player> players;
+    
+    @ManyToOne
+    @JoinColumn(name="event_id", nullable=false)
+    private Event event;
 
     public Integer getId() {
         return id;
@@ -67,6 +73,14 @@ public class Tournament implements Serializable {
         this.players = players;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+    
     public enum TypeCompetidor {
         GROUP("Em Grupo"),
         SINGLE("Individual");

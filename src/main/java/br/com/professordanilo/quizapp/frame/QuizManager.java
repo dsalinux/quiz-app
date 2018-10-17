@@ -6,6 +6,7 @@
 package br.com.professordanilo.quizapp.frame;
 
 import br.com.professordanilo.quizapp.entity.Event;
+import br.com.professordanilo.quizapp.entity.Tournament;
 import br.com.professordanilo.quizapp.util.AppIcons;
 import br.com.professordanilo.quizapp.util.ContextDAO;
 import br.com.professordanilo.quizapp.util.ContextLogic;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,12 +50,14 @@ public class QuizManager extends javax.swing.JFrame {
     private GraphicsDevice[] devices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
     private List<Event> events;
     private Event event;
+    private Tournament tournament;
 
     private QuizManagerState frameState = QuizManagerState.SELECT_EVENT;
 
     private enum QuizManagerState {
         SELECT_EVENT,
         EDIT_EVENT,
+        EDIT_TOURNAMENT,
         BATTLE
     }
 
@@ -91,6 +95,23 @@ public class QuizManager extends javax.swing.JFrame {
             SwingUtil.addMessageError(ex);
             Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void listTournament(){
+        if(event == null){
+            return;
+        }
+        if(event.getTournaments() == null){
+            event.setTournaments(new ArrayList<>());
+        }
+        TableModel model = new DefaultTableModel(new String[]{"Nome"}, event.getTournaments().size());
+        for (int i = 0; i < event.getTournaments().size(); i++) {
+            model.setValueAt(event.getTournaments().get(i), i, 1);
+        }
+        tblTournament.setModel(model);
+        tblTournament.getSelectionModel().addListSelectionListener(((e) -> {
+            btnSelectTournament.setEnabled(tblTournament.getSelectedRow() > -1);
+        }));
     }
 
     private void selectOriginalLogo() {
@@ -211,7 +232,7 @@ public class QuizManager extends javax.swing.JFrame {
         btnSelectTournament = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblEvent1 = new javax.swing.JTable();
+        tblTournament = new javax.swing.JTable();
         pnlSelectTournament = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         btnSelectOtherTournament = new javax.swing.JButton();
@@ -523,7 +544,7 @@ public class QuizManager extends javax.swing.JFrame {
 
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("Torneio"));
 
-        tblEvent1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTournament.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -534,7 +555,7 @@ public class QuizManager extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(tblEvent1);
+        jScrollPane3.setViewportView(tblTournament);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -1077,8 +1098,8 @@ public class QuizManager extends javax.swing.JFrame {
     private javax.swing.JSpinner spinStopwatch;
     private javax.swing.JTabbedPane tabPaneQuiz;
     private javax.swing.JTable tblEvent;
-    private javax.swing.JTable tblEvent1;
     private javax.swing.JTable tblPlayers;
+    private javax.swing.JTable tblTournament;
     private javax.swing.JTextField txtNameEvent;
     private javax.swing.JTextField txtNameEvent1;
     // End of variables declaration//GEN-END:variables
