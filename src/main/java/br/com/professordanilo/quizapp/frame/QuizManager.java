@@ -1067,7 +1067,7 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSelectOtherTournamentActionPerformed
 
     private void btnStartBattle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartBattle1ActionPerformed
-        // TODO add your handling code here:
+        changeFrameState(QuizManagerState.BATTLE);
     }//GEN-LAST:event_btnStartBattle1ActionPerformed
 
     private void btnNewTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewTournamentActionPerformed
