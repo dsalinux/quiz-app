@@ -3,6 +3,8 @@ package br.com.professordanilo.quizapp.entity;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -22,9 +24,27 @@ public class Player implements Serializable {
     private Integer id;
     private String name;
     @ManyToOne
-    @JoinColumn(name="tournament_id", nullable=false)
+    @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
-//    private PlayerType playerType;
+    @Enumerated(EnumType.STRING)
+    private PlayerType playerType = PlayerType.GROUP;
+
+    public enum PlayerType {
+        GROUP("Em Grupo"),
+        MALE("Masculino"),
+        FEMALE("Feminino");
+
+        private String description;
+
+        PlayerType(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+    }
 
     public Player() {
     }
@@ -32,7 +52,7 @@ public class Player implements Serializable {
     public Player(Integer id) {
         this.id = id;
     }
-    
+
     public Integer getId() {
         return id;
     }
@@ -56,7 +76,7 @@ public class Player implements Serializable {
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 7;

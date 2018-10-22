@@ -8,7 +8,6 @@ package br.com.professordanilo.quizapp.frame;
 import br.com.professordanilo.quizapp.entity.Event;
 import br.com.professordanilo.quizapp.entity.Tournament;
 import br.com.professordanilo.quizapp.util.AppIcons;
-import br.com.professordanilo.quizapp.util.ContextDAO;
 import br.com.professordanilo.quizapp.util.ContextLogic;
 import br.com.professordanilo.quizapp.util.ImageUtil;
 import br.com.professordanilo.quizapp.util.StringHelper;
@@ -18,10 +17,8 @@ import br.com.professordanilo.quizapp.util.exception.SystemException;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +32,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -96,21 +92,38 @@ public class QuizManager extends javax.swing.JFrame {
             Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void listTournament(){
-        if(event == null){
+
+    public void listTournament() {
+        if (event == null) {
             return;
         }
-        if(event.getTournaments() == null){
+        if (event.getTournaments() == null) {
             event.setTournaments(new ArrayList<>());
         }
         TableModel model = new DefaultTableModel(new String[]{"Nome"}, event.getTournaments().size());
         for (int i = 0; i < event.getTournaments().size(); i++) {
-            model.setValueAt(event.getTournaments().get(i), i, 1);
+            model.setValueAt(event.getTournaments().get(i), i, 0);
         }
         tblTournament.setModel(model);
         tblTournament.getSelectionModel().addListSelectionListener(((e) -> {
             btnSelectTournament.setEnabled(tblTournament.getSelectedRow() > -1);
+        }));
+    }
+
+    public void listPlayers() {
+        if (tournament == null) {
+            return;
+        }
+        if (tournament.getPlayers() == null) {
+            tournament.setPlayers(new ArrayList<>());
+        }
+        TableModel model = new DefaultTableModel(new String[]{"Nome"}, tournament.getPlayers().size());
+        for (int i = 0; i < tournament.getPlayers().size(); i++) {
+            model.setValueAt(tournament.getPlayers().get(i), i, 1);
+        }
+        tblPlayers.setModel(model);
+        tblPlayers.getSelectionModel().addListSelectionListener(((e) -> {
+            tblPlayers.setEnabled(tblPlayers.getSelectedRow() > -1);
         }));
     }
 
@@ -131,19 +144,29 @@ public class QuizManager extends javax.swing.JFrame {
                 event.setLogo(bimage);
                 saveEvent();
             } catch (IOException ex) {
+                SwingUtil.addMessageError(rootPane, "Erro ao Selecionar a imagem. Verifique o arquivo selecionado.");
                 Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     private void updateEvent() {
-        txtNameEvent.setText(event.getName());
-//        spinStopwatch.setValue(event.getStopwatch()); TODO
-//        if (event.getTypeCompetidor() == Event.TypeCompetidor.GROUP) {
-//            rbGroup.setSelected(true);
-//        } else {
-//            rbSingle.setSelected(true);
-//        }
+        try {
+            event = ContextLogic.getEventLogic().getEntity(event.getId());
+            txtNameEvent.setText(event.getName());
+            listTournament();
+            updatePreviewLogo();
+        } catch (BusinessException ex) {
+            Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SystemException ex) {
+            Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void updateTournament() {
+        txtNameTournament.setText(tournament.getName());
+        spinStopwatch.setValue(tournament.getStopwatch());
+        listPlayers();
         updatePreviewLogo();
     }
 
@@ -164,15 +187,23 @@ public class QuizManager extends javax.swing.JFrame {
     private void changeFrameState(QuizManagerState state) {
         tabPaneQuiz.setEnabledAt(QuizManagerState.SELECT_EVENT.ordinal(), false);
         tabPaneQuiz.setEnabledAt(QuizManagerState.EDIT_EVENT.ordinal(), false);
+        tabPaneQuiz.setEnabledAt(QuizManagerState.EDIT_TOURNAMENT.ordinal(), false);
         tabPaneQuiz.setEnabledAt(QuizManagerState.BATTLE.ordinal(), false);
         switch (state) {
             case SELECT_EVENT:
                 tabPaneQuiz.setSelectedIndex(QuizManagerState.SELECT_EVENT.ordinal());
                 tabPaneQuiz.setEnabledAt(QuizManagerState.SELECT_EVENT.ordinal(), true);
+                listEvent();
                 break;
             case EDIT_EVENT:
                 tabPaneQuiz.setEnabledAt(QuizManagerState.EDIT_EVENT.ordinal(), true);
                 tabPaneQuiz.setSelectedIndex(QuizManagerState.EDIT_EVENT.ordinal());
+                updateEvent();
+                break;
+            case EDIT_TOURNAMENT:
+                tabPaneQuiz.setEnabledAt(QuizManagerState.EDIT_TOURNAMENT.ordinal(), true);
+                tabPaneQuiz.setSelectedIndex(QuizManagerState.EDIT_TOURNAMENT.ordinal());
+                updateTournament();
                 break;
             case BATTLE:
                 tabPaneQuiz.setEnabledAt(QuizManagerState.BATTLE.ordinal(), true);
@@ -187,7 +218,20 @@ public class QuizManager extends javax.swing.JFrame {
             updateEvent();
         } catch (BusinessException ex) {
             SwingUtil.addMessageWarn(ex);
+            Logger.getLogger(QuizManager.class.getName()).log(Level.WARNING, null, ex);
+        } catch (SystemException ex) {
+            SwingUtil.addMessageError(ex);
             Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    private void saveTournament() {
+        try {
+            tournament.setEvent(event);
+            tournament = ContextLogic.getTournamentLogic().save(tournament);
+            updateTournament();
+        } catch (BusinessException ex) {
+            SwingUtil.addMessageWarn(ex);
+            Logger.getLogger(QuizManager.class.getName()).log(Level.WARNING, null, ex);
         } catch (SystemException ex) {
             SwingUtil.addMessageError(ex);
             Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -217,11 +261,6 @@ public class QuizManager extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtNameEvent = new javax.swing.JTextField();
-        spinStopwatch = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        rbSingle = new javax.swing.JRadioButton();
-        rbGroup = new javax.swing.JRadioButton();
         jPanel8 = new javax.swing.JPanel();
         btnSelectLogo = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -245,7 +284,12 @@ public class QuizManager extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jPanel12 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        txtNameEvent1 = new javax.swing.JTextField();
+        txtNameTournament = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        spinStopwatch = new javax.swing.JSpinner();
+        jLabel3 = new javax.swing.JLabel();
+        rbGroup = new javax.swing.JRadioButton();
+        rbSingle = new javax.swing.JRadioButton();
         pnlBattle = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         cboDevices = new javax.swing.JComboBox<>();
@@ -378,33 +422,6 @@ public class QuizManager extends javax.swing.JFrame {
             }
         });
 
-        spinStopwatch.setModel(new javax.swing.SpinnerNumberModel(5, 0, 15, 1));
-        spinStopwatch.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spinStopwatchStateChanged(evt);
-            }
-        });
-
-        jLabel2.setText("Tempo Cronômetro");
-
-        jLabel3.setText("Competidor");
-
-        groupCompetidor.add(rbSingle);
-        rbSingle.setText("Individual");
-        rbSingle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbSingleActionPerformed(evt);
-            }
-        });
-
-        groupCompetidor.add(rbGroup);
-        rbGroup.setText("Grupo");
-        rbGroup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbGroupActionPerformed(evt);
-            }
-        });
-
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Logo para projeção"));
 
         btnSelectLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/dialog-ok.png"))); // NOI18N
@@ -457,22 +474,9 @@ public class QuizManager extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spinStopwatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rbGroup)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rbSingle)
-                        .addGap(0, 94, Short.MAX_VALUE))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtNameEvent)))
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNameEvent)
                 .addGap(12, 12, 12))
         );
         jPanel7Layout.setVerticalGroup(
@@ -482,13 +486,6 @@ public class QuizManager extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNameEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spinStopwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(rbSingle)
-                    .addComponent(rbGroup))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -684,7 +681,7 @@ public class QuizManager extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -692,9 +689,36 @@ public class QuizManager extends javax.swing.JFrame {
 
         jLabel4.setText("Nome");
 
-        txtNameEvent1.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtNameTournament.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNameEvent1FocusLost(evt);
+                txtNameTournamentFocusLost(evt);
+            }
+        });
+
+        jLabel2.setText("Tempo Cronômetro");
+
+        spinStopwatch.setModel(new javax.swing.SpinnerNumberModel(5, 0, 15, 1));
+        spinStopwatch.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spinStopwatchStateChanged(evt);
+            }
+        });
+
+        jLabel3.setText("Competidor");
+
+        groupCompetidor.add(rbGroup);
+        rbGroup.setText("Grupo");
+        rbGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbGroupActionPerformed(evt);
+            }
+        });
+
+        groupCompetidor.add(rbSingle);
+        rbSingle.setText("Individual");
+        rbSingle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbSingleActionPerformed(evt);
             }
         });
 
@@ -704,10 +728,23 @@ public class QuizManager extends javax.swing.JFrame {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNameEvent1)
-                .addGap(12, 12, 12))
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNameTournament, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+                        .addGap(12, 12, 12))
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spinStopwatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbGroup)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbSingle)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -715,8 +752,15 @@ public class QuizManager extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtNameEvent1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtNameTournament, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(spinStopwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(rbSingle)
+                    .addComponent(rbGroup))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlSelectTournamentLayout = new javax.swing.GroupLayout(pnlSelectTournament);
@@ -737,9 +781,9 @@ public class QuizManager extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -945,11 +989,10 @@ public class QuizManager extends javax.swing.JFrame {
     private void btnSelectEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectEventActionPerformed
         try {
             event = ContextLogic.getEventLogic().getEntity(((Event) tblEvent.getValueAt(tblEvent.getSelectedRow(), 0)).getId());
-            updateEvent();
             changeFrameState(QuizManagerState.EDIT_EVENT);
         } catch (BusinessException ex) {
             SwingUtil.addMessageWarn(ex);
-            Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuizManager.class.getName()).log(Level.WARNING, null, ex);
         } catch (SystemException ex) {
             SwingUtil.addMessageError(ex);
             Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -1016,11 +1059,11 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackToEditEventActionPerformed
 
     private void chkFullscreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFullscreenActionPerformed
-        chkFullscreen.setText(chkFullscreen.isSelected()?"Modo Tela Cheia":"Modo Janela");
+        chkFullscreen.setText(chkFullscreen.isSelected() ? "Modo Tela Cheia" : "Modo Janela");
     }//GEN-LAST:event_chkFullscreenActionPerformed
 
     private void btnSelectOtherTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectOtherTournamentActionPerformed
-        // TODO add your handling code here:
+        changeFrameState(QuizManagerState.EDIT_EVENT);
     }//GEN-LAST:event_btnSelectOtherTournamentActionPerformed
 
     private void btnStartBattle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartBattle1ActionPerformed
@@ -1028,16 +1071,24 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnStartBattle1ActionPerformed
 
     private void btnNewTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewTournamentActionPerformed
-        // TODO add your handling code here:
+        tournament = new Tournament();
+        String name = "";
+        name = JOptionPane.showInputDialog(rootPane, "Informe o nome do torneio.");
+        if (StringHelper.isEmpty(name)) {
+            return;
+        }
+        tournament.setName(name);
+        saveTournament();
+        changeFrameState(QuizManagerState.EDIT_TOURNAMENT);
     }//GEN-LAST:event_btnNewTournamentActionPerformed
 
     private void btnSelectTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectTournamentActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSelectTournamentActionPerformed
 
-    private void txtNameEvent1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameEvent1FocusLost
+    private void txtNameTournamentFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameTournamentFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNameEvent1FocusLost
+    }//GEN-LAST:event_txtNameTournamentFocusLost
 
     private void menuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExitActionPerformed
         System.exit(0);
@@ -1101,6 +1152,6 @@ public class QuizManager extends javax.swing.JFrame {
     private javax.swing.JTable tblPlayers;
     private javax.swing.JTable tblTournament;
     private javax.swing.JTextField txtNameEvent;
-    private javax.swing.JTextField txtNameEvent1;
+    private javax.swing.JTextField txtNameTournament;
     // End of variables declaration//GEN-END:variables
 }

@@ -35,10 +35,16 @@ public class GenericDAO<T, I extends Serializable> {
         closeSession();
     }
     
-    public void initializer(List<T> entitys){
-        entitys.forEach((entity) -> {
-            Hibernate.initialize(entity);
-        });
+//    public void initializer(List<T> entitys){
+//        entitys.forEach((entity) -> {
+//            Hibernate.initialize(entity);
+//        });
+//    }
+    
+    public void initializer(List entitysLoad){
+        getSession();
+        Hibernate.initialize(entitysLoad);
+        closeSession();
     }
     
     public T findById(I id) {

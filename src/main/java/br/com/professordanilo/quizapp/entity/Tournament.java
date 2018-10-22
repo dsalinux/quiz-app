@@ -24,14 +24,19 @@ public class Tournament implements Serializable {
     private Integer id;
     private String name;
     private Integer stopwatch = 5;
-    @Enumerated(EnumType.STRING)
-    private TypeCompetidor typeCompetidor = TypeCompetidor.GROUP;
     @OneToMany(mappedBy = "tournament")
     private List<Player> players;
     
     @ManyToOne
     @JoinColumn(name="event_id", nullable=false)
     private Event event;
+
+    public Tournament() {
+    }
+
+    public Tournament(Integer id) {
+        this.id = id;
+    }
 
     public Integer getId() {
         return id;
@@ -57,14 +62,6 @@ public class Tournament implements Serializable {
         this.stopwatch = stopwatch;
     }
 
-    public TypeCompetidor getTypeCompetidor() {
-        return typeCompetidor;
-    }
-
-    public void setTypeCompetidor(TypeCompetidor typeCompetidor) {
-        this.typeCompetidor = typeCompetidor;
-    }
-
     public List<Player> getPlayers() {
         return players;
     }
@@ -79,22 +76,6 @@ public class Tournament implements Serializable {
 
     public void setEvent(Event event) {
         this.event = event;
-    }
-    
-    public enum TypeCompetidor {
-        GROUP("Em Grupo"),
-        SINGLE("Individual");
-
-        private String description;
-
-        TypeCompetidor(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
     }
 
     @Override

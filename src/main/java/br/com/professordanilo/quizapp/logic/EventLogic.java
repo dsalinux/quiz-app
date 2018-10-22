@@ -5,12 +5,14 @@ import br.com.professordanilo.quizapp.util.ContextDAO;
 import br.com.professordanilo.quizapp.util.exception.BusinessException;
 import br.com.professordanilo.quizapp.util.exception.SystemException;
 import java.util.List;
+import org.hibernate.Hibernate;
 
 public class EventLogic implements GenericLogic<Event, Integer>{
 
     @Override
     public Event save(Event entity) throws BusinessException, SystemException {
         entity = ContextDAO.getEventDAO().save(entity);
+        ContextDAO.getEventDAO().initializer(entity.getTournaments());
         return entity;
     }
 

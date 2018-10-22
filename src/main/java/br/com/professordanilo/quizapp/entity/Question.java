@@ -24,6 +24,14 @@ public class Question implements Serializable {
     private String subject;
     private boolean selected;
 
+    public Question() {
+    }
+
+    
+    public Question(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
