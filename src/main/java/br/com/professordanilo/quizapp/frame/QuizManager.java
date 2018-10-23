@@ -11,6 +11,7 @@ import br.com.professordanilo.quizapp.entity.Tournament;
 import br.com.professordanilo.quizapp.util.AppIcons;
 import br.com.professordanilo.quizapp.util.ContextLogic;
 import br.com.professordanilo.quizapp.util.ImageUtil;
+import br.com.professordanilo.quizapp.util.LogUtil;
 import br.com.professordanilo.quizapp.util.StringHelper;
 import br.com.professordanilo.quizapp.util.SwingUtil;
 import br.com.professordanilo.quizapp.util.exception.BusinessException;
@@ -229,6 +230,10 @@ public class QuizManager extends javax.swing.JFrame {
 
     private void saveTournament() {
         try {
+            if (StringHelper.isEmpty(tournament.getName())) {
+                SwingUtil.addMessageWarn("Informe o nome do torneio.");
+                return;
+            }
             tournament.setEvent(event);
             tournament = ContextLogic.getTournamentLogic().save(tournament);
             updateTournament();
@@ -1020,6 +1025,8 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSelectOtherEventActionPerformed
 
     private void txtNameEventFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameEventFocusLost
+        
+        
         event.setName(txtNameEvent.getText());
         saveEvent();
     }//GEN-LAST:event_txtNameEventFocusLost
@@ -1061,7 +1068,8 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSelectTournamentActionPerformed
 
     private void txtNameTournamentFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameTournamentFocusLost
-        // TODO add your handling code here:
+        tournament.setName(txtNameTournament.getText());
+        saveTournament();
     }//GEN-LAST:event_txtNameTournamentFocusLost
 
     private void menuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExitActionPerformed
@@ -1069,12 +1077,21 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_menuExitActionPerformed
 
     private void btnDeleteEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteEventActionPerformed
-        SwingUtil.addMessageError("Ainda não implementado");
+        try {
+            ContextLogic.getEventLogic().delete(event);
+        } catch (BusinessException ex) {
+            LogUtil.warn(QuizManager.class, ex.getMessage());
+            SwingUtil.addMessageWarn(ex);
+        } catch (SystemException ex) {
+            LogUtil.error(QuizManager.class, ex.getMessage());
+            ex.printStackTrace();
+            SwingUtil.addMessageError(ex);
+        }
     }//GEN-LAST:event_btnDeleteEventActionPerformed
 
     private void btnNewPlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewPlayerActionPerformed
         try {
-            Player p = new NewPlayerFrm(this, true).showDialog();
+            Player p = new NewPlayerModal(this, true).showDialog();
             if (p == null) {
                 SwingUtil.addMessageError("Cancelou");
             } else {

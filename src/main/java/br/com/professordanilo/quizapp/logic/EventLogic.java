@@ -18,6 +18,9 @@ public class EventLogic implements GenericLogic<Event, Integer>{
 
     @Override
     public void delete(Event entity) throws BusinessException, SystemException {
+        if(entity.getTournaments() != null && !entity.getTournaments().isEmpty()){
+            throw new BusinessException("Não é possível remover um evento que possúi torneios. Remova os torneios para remover o evento.");
+        }
         ContextDAO.getEventDAO().delete(entity);
     }
 
