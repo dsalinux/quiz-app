@@ -2,8 +2,6 @@
 
 <Form version="1.6" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.ButtonGroup" name="groupCompetidor">
-    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="menuFile">
@@ -252,8 +250,8 @@
         <Container class="javax.swing.JPanel" name="pnlEditEvent">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Gerenciar Evento">
-                <Property name="tabTitle" type="java.lang.String" value="Gerenciar Evento"/>
+              <JTabbedPaneConstraints tabName="Selecionar Torneio">
+                <Property name="tabTitle" type="java.lang.String" value="Selecionar Torneio"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -333,6 +331,11 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtNameEvent">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
+                  </Properties>
                   <Events>
                     <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNameEventFocusLost"/>
                   </Events>
@@ -543,8 +546,8 @@
         <Container class="javax.swing.JPanel" name="pnlSelectTournament">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Gerenciar Torneio">
-                <Property name="tabTitle" type="java.lang.String" value="Gerenciar Torneio"/>
+              <JTabbedPaneConstraints tabName="Selecionar Jogadores">
+                <Property name="tabTitle" type="java.lang.String" value="Selecionar Jogadores"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -569,10 +572,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel10" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel12" max="32767" attributes="0"/>
+                      <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -594,7 +597,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnSelectOtherTournament" min="-2" pref="232" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnStartBattle1" min="-2" pref="241" max="-2" attributes="0"/>
+                          <Component id="btnStartBattle" min="-2" pref="241" max="-2" attributes="0"/>
                           <EmptySpace pref="379" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -603,7 +606,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                           <Component id="btnSelectOtherTournament" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnStartBattle1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnStartBattle" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -620,7 +623,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectOtherTournamentActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnStartBattle1">
+                <Component class="javax.swing.JButton" name="btnStartBattle">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/br/com/professordanilo/quizapp/images/game.png"/>
@@ -628,7 +631,7 @@
                     <Property name="text" type="java.lang.String" value="Iniciar Competi&#xe7;&#xe3;o"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStartBattle1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStartBattleActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -671,7 +674,7 @@
                               <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" pref="290" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="325" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -753,12 +756,6 @@
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="spinStopwatch" min="-2" pref="60" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="rbGroup" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="rbSingle" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -777,11 +774,8 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="spinStopwatch" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbSingle" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbGroup" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="48" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -793,6 +787,11 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtNameTournament">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
+                  </Properties>
                   <Events>
                     <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNameTournamentFocusLost"/>
                   </Events>
@@ -810,33 +809,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spinStopwatchStateChanged"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabel3">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Competidor"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JRadioButton" name="rbGroup">
-                  <Properties>
-                    <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                      <ComponentRef name="groupCompetidor"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Grupo"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbGroupActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JRadioButton" name="rbSingle">
-                  <Properties>
-                    <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                      <ComponentRef name="groupCompetidor"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Individual"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbSingleActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>

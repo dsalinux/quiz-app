@@ -13,7 +13,7 @@ public class SwingUtil {
     }
     
     public static void addMessageError(Component component, String message){
-        addMessage(component, message, "Aviso", JOptionPane.WARNING_MESSAGE);
+        addMessage(component, message, "Aviso", JOptionPane.ERROR_MESSAGE);
     }
     public static void addMessageError(Component component, SystemException exception){
         addMessageError(component, exception.getMessage());

@@ -25,6 +25,7 @@ public class NewPlayerFrm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
+        rootPane.setDefaultButton(btnAdd);
     }
     
     public Player showDialog(){
@@ -69,7 +70,7 @@ public class NewPlayerFrm extends javax.swing.JDialog {
         tbGrupeType = new javax.swing.JToggleButton();
         tbMaleType = new javax.swing.JToggleButton();
         tbFemaleType = new javax.swing.JToggleButton();
-        btnAddiction = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
 
@@ -97,11 +98,11 @@ public class NewPlayerFrm extends javax.swing.JDialog {
         tbFemaleType.setActionCommand("female");
         tbFemaleType.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/player-female.png"))); // NOI18N
 
-        btnAddiction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/list-add.png"))); // NOI18N
-        btnAddiction.setText("Adicionar");
-        btnAddiction.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/list-add.png"))); // NOI18N
+        btnAdd.setText("Adicionar");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddictionActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
@@ -124,7 +125,7 @@ public class NewPlayerFrm extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAddiction, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -158,7 +159,7 @@ public class NewPlayerFrm extends javax.swing.JDialog {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddiction)
+                    .addComponent(btnAdd)
                     .addComponent(btnCancel))
                 .addContainerGap())
         );
@@ -171,7 +172,7 @@ public class NewPlayerFrm extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void btnAddictionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddictionActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         player.setName(txtName.getText().trim());
         if(StringHelper.isEmpty(player.getName())){
             SwingUtil.addMessageWarn("Informe o nome do competidor.");
@@ -196,7 +197,7 @@ public class NewPlayerFrm extends javax.swing.JDialog {
         }
         dispose();
         
-    }//GEN-LAST:event_btnAddictionActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * @param args the command line arguments
@@ -241,7 +242,7 @@ public class NewPlayerFrm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddiction;
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
     private javax.swing.ButtonGroup groupPlayerType;
     private javax.swing.JLabel jLabel1;
