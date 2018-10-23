@@ -20,10 +20,10 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="com.howtodoinjava" level="debug" additivity="true">
-            <appender-ref ref="fileLogger" level="debug" />
+        <Logger name="com.howtodoinjava" level="warn" additivity="true">
+            <appender-ref ref="fileLogger" level="warn" />
         </Logger>
-        <Root level="debug" additivity="true">
+        <Root level="warn" additivity="true">
             <appender-ref ref="fileLogger" />
             <appender-ref ref="console" />
         </Root>

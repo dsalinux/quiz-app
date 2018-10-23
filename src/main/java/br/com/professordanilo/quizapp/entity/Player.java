@@ -77,6 +77,14 @@ public class Player implements Serializable {
         this.tournament = tournament;
     }
 
+    public PlayerType getPlayerType() {
+        return playerType;
+    }
+
+    public void setPlayerType(PlayerType playerType) {
+        this.playerType = playerType;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;

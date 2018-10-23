@@ -241,6 +241,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Deletar Evento"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteEventActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -703,6 +706,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Novo Joador"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNewPlayerActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton1">
                   <Properties>

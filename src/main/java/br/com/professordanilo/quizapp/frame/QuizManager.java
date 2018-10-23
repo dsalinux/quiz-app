@@ -6,6 +6,7 @@
 package br.com.professordanilo.quizapp.frame;
 
 import br.com.professordanilo.quizapp.entity.Event;
+import br.com.professordanilo.quizapp.entity.Player;
 import br.com.professordanilo.quizapp.entity.Tournament;
 import br.com.professordanilo.quizapp.util.AppIcons;
 import br.com.professordanilo.quizapp.util.ContextLogic;
@@ -119,7 +120,7 @@ public class QuizManager extends javax.swing.JFrame {
         }
         TableModel model = new DefaultTableModel(new String[]{"Nome"}, tournament.getPlayers().size());
         for (int i = 0; i < tournament.getPlayers().size(); i++) {
-            model.setValueAt(tournament.getPlayers().get(i), i, 1);
+            model.setValueAt(tournament.getPlayers().get(i), i, 0);
         }
         tblPlayers.setModel(model);
         tblPlayers.getSelectionModel().addListSelectionListener(((e) -> {
@@ -224,6 +225,7 @@ public class QuizManager extends javax.swing.JFrame {
             Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     private void saveTournament() {
         try {
             tournament.setEvent(event);
@@ -367,6 +369,11 @@ public class QuizManager extends javax.swing.JFrame {
 
         btnDeleteEvent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/draw-eraser.png"))); // NOI18N
         btnDeleteEvent.setText("Deletar Evento");
+        btnDeleteEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteEventActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -649,6 +656,11 @@ public class QuizManager extends javax.swing.JFrame {
 
         btnNewPlayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/list-add.png"))); // NOI18N
         btnNewPlayer.setText("Novo Joador");
+        btnNewPlayer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewPlayerActionPerformed(evt);
+            }
+        });
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/gtk-edit.png"))); // NOI18N
         jButton1.setText("Editar Jogador");
@@ -1093,6 +1105,30 @@ public class QuizManager extends javax.swing.JFrame {
     private void menuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_menuExitActionPerformed
+
+    private void btnDeleteEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteEventActionPerformed
+        SwingUtil.addMessageError("Ainda não implementado");
+    }//GEN-LAST:event_btnDeleteEventActionPerformed
+
+    private void btnNewPlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewPlayerActionPerformed
+        try {
+            Player p = new NewPlayerFrm(this, true).showDialog();
+            if (p == null) {
+                SwingUtil.addMessageError("Cancelou");
+            } else {
+                p.setTournament(tournament);
+                p = ContextLogic.getPlayerLogic().save(p);
+            }
+            tournament = ContextLogic.getTournamentLogic().getEntity(tournament.getId());
+            updateTournament();
+        } catch (BusinessException ex) {
+            Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
+            SwingUtil.addMessageWarn(ex);
+        } catch (SystemException ex) {
+            Logger.getLogger(QuizManager.class.getName()).log(Level.SEVERE, null, ex);
+            SwingUtil.addMessageError(ex);
+        }
+    }//GEN-LAST:event_btnNewPlayerActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBackToEditEvent;
