@@ -30,7 +30,7 @@ public class Player implements Serializable {
     private PlayerType playerType = PlayerType.GROUP;
 
     public enum PlayerType {
-        GROUP("Em Grupo"),
+        GROUP("Grupo"),
         MALE("Masculino"),
         FEMALE("Feminino");
 
@@ -112,7 +112,7 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return name + " - "+playerType.description;
     }
 
 }

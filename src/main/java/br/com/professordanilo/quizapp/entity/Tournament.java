@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -102,6 +100,9 @@ public class Tournament implements Serializable {
         }
         return true;
     }
-    
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

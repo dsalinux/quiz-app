@@ -9,6 +9,7 @@ import br.com.professordanilo.quizapp.entity.Event;
 import br.com.professordanilo.quizapp.entity.Player;
 import br.com.professordanilo.quizapp.entity.Tournament;
 import br.com.professordanilo.quizapp.util.AppIcons;
+import br.com.professordanilo.quizapp.util.CheckboxListCellRenderer;
 import br.com.professordanilo.quizapp.util.ContextLogic;
 import br.com.professordanilo.quizapp.util.ImageUtil;
 import br.com.professordanilo.quizapp.util.LogUtil;
@@ -29,10 +30,12 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -128,6 +131,43 @@ public class QuizManager extends javax.swing.JFrame {
             tblPlayers.setEnabled(tblPlayers.getSelectedRow() > -1);
         }));
         btnStartBattle.setEnabled(tournament.getPlayers().size() >= 2);
+        if (tournament.getPlayers().size() < 2) {
+            return;
+        }
+        ListModel<Player> listModel = new DefaultComboBoxModel<>(tournament.getPlayers().toArray(new Player[]{}));
+        listPlayers.setCellRenderer(new CheckboxListCellRenderer());
+        listPlayers.setSelectionModel(new DefaultListSelectionModel() {
+
+            private int i0 = -1;
+            private int i1 = -1;
+
+            public void setSelectionInterval(int index0, int index1) {
+                if(listPlayers.getSelectedIndices().length > 1){
+                    listPlayers.setSelectedIndices(new int[]{});
+                }
+                if (i0 == index0 && i1 == index1) {
+                    if (getValueIsAdjusting()) {
+                        setValueIsAdjusting(false);
+                        setSelection(index0, index1);
+                    }
+                } else {
+                    i0 = index0;
+                    i1 = index1;
+                    setValueIsAdjusting(false);
+                    setSelection(index0, index1);
+                }
+            }
+
+            private void setSelection(int index0, int index1) {
+                if (super.isSelectedIndex(index0)) {
+                    super.removeSelectionInterval(index0, index1);
+                } else {
+                    super.addSelectionInterval(index0, index1);
+                }
+            }
+
+        });
+        listPlayers.setModel(listModel);
     }
 
     private void selectOriginalLogo() {
@@ -197,11 +237,13 @@ public class QuizManager extends javax.swing.JFrame {
                 tabPaneQuiz.setSelectedIndex(QuizManagerState.SELECT_EVENT.ordinal());
                 tabPaneQuiz.setEnabledAt(QuizManagerState.SELECT_EVENT.ordinal(), true);
                 listEvent();
+                btnSelectEvent.setEnabled(tblEvent.getSelectedRow() > -1);
                 break;
             case EDIT_EVENT:
                 tabPaneQuiz.setEnabledAt(QuizManagerState.EDIT_EVENT.ordinal(), true);
                 tabPaneQuiz.setSelectedIndex(QuizManagerState.EDIT_EVENT.ordinal());
                 updateEvent();
+                btnSelectTournament.setEnabled(tblTournament.getSelectedRow() > -1);
                 break;
             case EDIT_TOURNAMENT:
                 tabPaneQuiz.setEnabledAt(QuizManagerState.EDIT_TOURNAMENT.ordinal(), true);
@@ -301,6 +343,27 @@ public class QuizManager extends javax.swing.JFrame {
         btnStartProjection = new javax.swing.JButton();
         btnStopProjection = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jPanel13 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        listPlayers = new javax.swing.JList<>();
+        btnProjectPlayers = new javax.swing.JButton();
+        jPanel14 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTextPane2 = new javax.swing.JTextPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTextPane3 = new javax.swing.JTextPane();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTextPane4 = new javax.swing.JTextPane();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        jTextPane5 = new javax.swing.JTextPane();
+        btnProjectQuestion = new javax.swing.JButton();
+        btnProjectAnswers = new javax.swing.JButton();
+        btnEndQuestion = new javax.swing.JButton();
+        btnSelectQuestion = new javax.swing.JButton();
+        btnProjectStopwatch = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
         jPanel9 = new javax.swing.JPanel();
         btnBackToEditEvent = new javax.swing.JButton();
         btnBackToSelectEvent = new javax.swing.JButton();
@@ -340,14 +403,14 @@ public class QuizManager extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 852, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 957, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -536,9 +599,9 @@ public class QuizManager extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(btnSelectOtherEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSelectTournament, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addComponent(btnSelectTournament, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnNewTournament, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(btnNewTournament, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
                 .addGap(62, 62, 62))
         );
         jPanel6Layout.setVerticalGroup(
@@ -570,14 +633,14 @@ public class QuizManager extends javax.swing.JFrame {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 852, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 957, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -633,7 +696,7 @@ public class QuizManager extends javax.swing.JFrame {
                 .addComponent(btnSelectOtherTournament, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnStartBattle, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(379, Short.MAX_VALUE))
+                .addContainerGap(484, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -730,7 +793,7 @@ public class QuizManager extends javax.swing.JFrame {
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtNameTournament, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+                        .addComponent(txtNameTournament, javax.swing.GroupLayout.DEFAULT_SIZE, 905, Short.MAX_VALUE)
                         .addGap(12, 12, 12))
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -794,7 +857,7 @@ public class QuizManager extends javax.swing.JFrame {
         });
 
         btnStartProjection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/view-right-new.png"))); // NOI18N
-        btnStartProjection.setText("Inicar Projeção");
+        btnStartProjection.setText("Inicar Tela de Projeção");
         btnStartProjection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnStartProjectionActionPerformed(evt);
@@ -819,10 +882,10 @@ public class QuizManager extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkFullscreen, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnStartProjection)
+                .addComponent(btnStartProjection, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnStopProjection)
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -836,17 +899,134 @@ public class QuizManager extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Questões"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Competição"));
+
+        jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Competidores"));
+
+        jScrollPane4.setViewportView(listPlayers);
+
+        btnProjectPlayers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/persons.png"))); // NOI18N
+        btnProjectPlayers.setText("Enviar Jogadores para Projeção");
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addComponent(btnProjectPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnProjectPlayers)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4)
+                .addContainerGap())
+        );
+
+        jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder("Questão"));
+
+        jScrollPane5.setViewportView(jTextPane1);
+
+        jScrollPane6.setViewportView(jTextPane2);
+
+        jScrollPane7.setViewportView(jTextPane3);
+
+        jScrollPane8.setViewportView(jTextPane4);
+
+        jScrollPane9.setViewportView(jTextPane5);
+
+        btnProjectQuestion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/view-list-tx.png"))); // NOI18N
+        btnProjectQuestion.setText("Projetar Pergunta");
+
+        btnProjectAnswers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/view-list.png"))); // NOI18N
+        btnProjectAnswers.setText("Projetar Respostas");
+
+        btnEndQuestion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/process-stop.png"))); // NOI18N
+        btnEndQuestion.setText("Encerar Pergunta");
+
+        btnSelectQuestion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/shuffle.png"))); // NOI18N
+        btnSelectQuestion.setText("Sortear Pergunta");
+
+        btnProjectStopwatch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/clock.png"))); // NOI18N
+        btnProjectStopwatch.setText("Iniciar Cronômetro");
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1)
+                    .addComponent(jScrollPane5)
+                    .addComponent(jScrollPane6)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane9)
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addComponent(btnSelectQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEndQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addComponent(btnProjectQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnProjectAnswers, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnProjectStopwatch, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSelectQuestion)
+                    .addComponent(btnEndQuestion))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnProjectQuestion)
+                    .addComponent(btnProjectAnswers)
+                    .addComponent(btnProjectStopwatch))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 414, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Navegação"));
@@ -1009,8 +1189,7 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_menuAboutActionPerformed
 
     private void tabPaneQuizStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneQuizStateChanged
-        listEvent();
-        btnSelectEvent.setEnabled(tblEvent.getSelectedRow() > -1);
+        
     }//GEN-LAST:event_tabPaneQuizStateChanged
 
     private void spinStopwatchStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinStopwatchStateChanged
@@ -1025,8 +1204,7 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSelectOtherEventActionPerformed
 
     private void txtNameEventFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameEventFocusLost
-        
-        
+
         event.setName(txtNameEvent.getText());
         saveEvent();
     }//GEN-LAST:event_txtNameEventFocusLost
@@ -1064,7 +1242,8 @@ public class QuizManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewTournamentActionPerformed
 
     private void btnSelectTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectTournamentActionPerformed
-        // TODO add your handling code here:
+        tournament = (Tournament) tblTournament.getModel().getValueAt(tblTournament.getSelectedRow(), 0);
+        changeFrameState(QuizManagerState.EDIT_TOURNAMENT);
     }//GEN-LAST:event_btnSelectTournamentActionPerformed
 
     private void txtNameTournamentFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameTournamentFocusLost
@@ -1113,13 +1292,19 @@ public class QuizManager extends javax.swing.JFrame {
     private javax.swing.JButton btnBackToEditEvent;
     private javax.swing.JButton btnBackToSelectEvent;
     private javax.swing.JButton btnDeleteEvent;
+    private javax.swing.JButton btnEndQuestion;
     private javax.swing.JButton btnNewEvent;
     private javax.swing.JButton btnNewPlayer;
     private javax.swing.JButton btnNewTournament;
+    private javax.swing.JButton btnProjectAnswers;
+    private javax.swing.JButton btnProjectPlayers;
+    private javax.swing.JButton btnProjectQuestion;
+    private javax.swing.JButton btnProjectStopwatch;
     private javax.swing.JButton btnSelectEvent;
     private javax.swing.JButton btnSelectLogo;
     private javax.swing.JButton btnSelectOtherEvent;
     private javax.swing.JButton btnSelectOtherTournament;
+    private javax.swing.JButton btnSelectQuestion;
     private javax.swing.JButton btnSelectTournament;
     private javax.swing.JButton btnStartBattle;
     private javax.swing.JButton btnStartProjection;
@@ -1138,6 +1323,8 @@ public class QuizManager extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1149,7 +1336,20 @@ public class QuizManager extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JTextPane jTextPane3;
+    private javax.swing.JTextPane jTextPane4;
+    private javax.swing.JTextPane jTextPane5;
     private javax.swing.JLabel lblViewLogo;
+    private javax.swing.JList<Player> listPlayers;
     private javax.swing.JMenuItem menuAbout;
     private javax.swing.JMenuItem menuExit;
     private javax.swing.JMenu menuFile;
