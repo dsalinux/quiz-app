@@ -9,4 +9,6 @@ import java.io.Serializable;
  */
 public class TournamentDAO extends GenericDAO<Tournament, Integer> implements Serializable{
     
+    private static final long serialVersionUID = 4232650118239374030L;
+    
 }
