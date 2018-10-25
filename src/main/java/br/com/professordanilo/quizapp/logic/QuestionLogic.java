@@ -2,7 +2,6 @@ package br.com.professordanilo.quizapp.logic;
 
 import br.com.professordanilo.quizapp.entity.Question;
 import br.com.professordanilo.quizapp.util.ContextDAO;
-import br.com.professordanilo.quizapp.util.StringHelper;
 import br.com.professordanilo.quizapp.util.exception.BusinessException;
 import br.com.professordanilo.quizapp.util.exception.SystemException;
 import java.util.List;

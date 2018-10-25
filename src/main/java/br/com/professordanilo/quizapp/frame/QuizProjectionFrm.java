@@ -287,8 +287,8 @@ public class QuizProjectionFrm extends JFrame {
 
     private void configLayout() {
         setExtendedState(MAXIMIZED_BOTH);
-//        setDefaultCloseOperation(HIDE_ON_CLOSE);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
+//        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(600, 300));
         //pack();
 

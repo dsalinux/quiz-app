@@ -27,7 +27,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -1164,6 +1168,11 @@ public class QuizManager extends javax.swing.JFrame {
 
         btnProjectStopwatch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/professordanilo/quizapp/images/clock.png"))); // NOI18N
         btnProjectStopwatch.setText("Iniciar Cronômetro");
+        btnProjectStopwatch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProjectStopwatchActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Dificuldade");
 
@@ -1466,8 +1475,8 @@ public class QuizManager extends javax.swing.JFrame {
 
     private void spinStopwatchStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinStopwatchStateChanged
         int stopwatch = Integer.parseInt(((JSpinner) evt.getSource()).getValue().toString());
-//        event.setStopwatch(stopwatch); TODO
-        saveEvent();
+        tournament.setStopwatch(stopwatch);
+        saveTournament();
     }//GEN-LAST:event_spinStopwatchStateChanged
 
     private void btnSelectOtherEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectOtherEventActionPerformed
@@ -1645,6 +1654,13 @@ public class QuizManager extends javax.swing.JFrame {
         quizProjectionFrm.updatePlayers(players.get(0), players.get(1));
         btnSelectQuestion.setEnabled(true);
     }//GEN-LAST:event_btnProjectPlayersActionPerformed
+
+    private void btnProjectStopwatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjectStopwatchActionPerformed
+        LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
+        map.put(AudioUtil.TICK_TOCK, tournament.getStopwatch()*1000);
+        map.put(AudioUtil.COMPLETE_TIME, 0);
+        AudioUtil.loop(map);
+    }//GEN-LAST:event_btnProjectStopwatchActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBackToEditEvent;

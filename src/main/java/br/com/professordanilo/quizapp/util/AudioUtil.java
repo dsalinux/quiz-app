@@ -2,13 +2,13 @@ package br.com.professordanilo.quizapp.util;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.TreeMap;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -58,7 +58,8 @@ public class AudioUtil {
                     try {
                         field.set(AudioUtil.class, properties.get(propertiesKey));
                     } catch (IllegalArgumentException | IllegalAccessException ex) {
-                        Logger.getLogger(AudioUtil.class.getName()).log(Level.SEVERE, null, ex);
+                        LogUtil.fatal(AudioUtil.class, ex);
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -83,6 +84,7 @@ public class AudioUtil {
 
             } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | InterruptedException ex) {
                 LogUtil.fatal(AudioUtil.class, ex.getMessage());
+                ex.printStackTrace();
             }
         }).start();
     }
@@ -93,7 +95,7 @@ public class AudioUtil {
                 LogUtil.debug(AudioUtil.class, "Reproduzindo: " + audio);
                 InputStream inputStream = new FileInputStream("./" + AUDIO_FOLDER + "/" + audio);
                 InputStream bufferedIn = new BufferedInputStream(inputStream);
-                AudioInputStream sound = AudioSystem.getAudioInputStream(inputStream);
+                AudioInputStream sound = AudioSystem.getAudioInputStream(bufferedIn);
                 DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
                 Clip clip = (Clip) AudioSystem.getLine(info);
                 clip.open(sound);
@@ -105,12 +107,37 @@ public class AudioUtil {
 
             } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | InterruptedException ex) {
                 LogUtil.fatal(AudioUtil.class, ex);
+                ex.printStackTrace();
             }
         }).start();
     }
+    
+    public static void loop(LinkedHashMap<String, Integer> audios) {
+        new Thread(() -> {
+            try {
+                for (Map.Entry<String, Integer> entry : audios.entrySet()) {
+                    LogUtil.debug(AudioUtil.class, "Reproduzindo: " + entry.getKey());
+                    InputStream inputStream = new FileInputStream("./" + AUDIO_FOLDER + "/" + entry.getKey());
+                    InputStream bufferedIn = new BufferedInputStream(inputStream);
+                    AudioInputStream sound = AudioSystem.getAudioInputStream(bufferedIn);
+                    DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
+                    Clip clip = (Clip) AudioSystem.getLine(info);
+                    clip.open(sound);
+                    clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    Integer timeClip = new Double(Math.ceil(clip.getMicrosecondLength() / 1000)).intValue();
+                    Integer time = entry.getValue();
+                    if(time == null || time.equals(0)){
+                        time = timeClip;
+                    }
+                    Thread.sleep(time);
+                    clip.stop();
+                    LogUtil.debug(AudioUtil.class, "Tempo do audio: " + time / 1000 + "s");
+                }
 
-    public static void main(String[] args) {
-        play(FAIL);
+            } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | InterruptedException ex) {
+                LogUtil.fatal(AudioUtil.class, ex);
+                ex.printStackTrace();
+            }
+        }).start();
     }
-
 }
