@@ -2,6 +2,7 @@ package br.com.professordanilo.quizapp.util;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -23,7 +24,7 @@ public class AudioUtil {
 
     @InjectAudio
     private static String AUDIO_FOLDER;
-    private static final String[] KEYS = new String[]{"AUDIO_FOLDER","TICK_TOCK","COMPLETE_TIME","FAIL","SUCCESS","THRILLER","SHOW_QUESTION","SELECT_ANSWER"};
+    private static final String[] KEYS = new String[]{"AUDIO_FOLDER", "TICK_TOCK", "COMPLETE_TIME", "FAIL", "SUCCESS", "THRILLER", "SHOW_QUESTION", "SELECT_ANSWER"};
     @InjectAudio
     public static String TICK_TOCK;
     @InjectAudio
@@ -42,14 +43,14 @@ public class AudioUtil {
     //Inject attributs from properties
     static {
         Properties properties = PropertiesUtil.getAudioProperties();
-        if(properties == null || properties.isEmpty()){
+        if (properties == null || properties.isEmpty()) {
             LogUtil.error(AudioUtil.class, "audio.properties não configurado corretamente.");
         } else {
-            for(Field field : AudioUtil.class.getDeclaredFields()){
-                if(field.isAnnotationPresent(InjectAudio.class)){
+            for (Field field : AudioUtil.class.getDeclaredFields()) {
+                if (field.isAnnotationPresent(InjectAudio.class)) {
                     InjectAudio injectAudio = field.getAnnotation(InjectAudio.class);
                     String propertiesKey;
-                    if(injectAudio.name().equals("none")){
+                    if (injectAudio.name().equals("none")) {
                         propertiesKey = field.getName();
                     } else {
                         propertiesKey = injectAudio.name();
@@ -63,44 +64,45 @@ public class AudioUtil {
             }
         }
     }
-    
+
     public static void play(String audio) {
         new Thread(() -> {
             try {
-                LogUtil.debug(AudioUtil.class, "Reproduzindo: "+audio);
-                InputStream inputStream = new FileInputStream("./"+AUDIO_FOLDER+"/"+audio);
+                LogUtil.debug(AudioUtil.class, "Reproduzindo: " + audio);
+                InputStream inputStream = new FileInputStream("./" + AUDIO_FOLDER + "/" + audio);
                 InputStream bufferedIn = new BufferedInputStream(inputStream);
                 AudioInputStream sound = AudioSystem.getAudioInputStream(bufferedIn);
                 DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
                 Clip clip = (Clip) AudioSystem.getLine(info);
                 clip.open(sound);
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
-                long time = new Double(Math.ceil(clip.getMicrosecondLength()/1000)).longValue();
+                long time = new Double(Math.ceil(clip.getMicrosecondLength() / 1000)).longValue();
                 Thread.sleep(time);
                 clip.stop();
-                LogUtil.debug(AudioUtil.class, "Tempo do audio: "+time/1000+"s");
-                
+                LogUtil.debug(AudioUtil.class, "Tempo do audio: " + time / 1000 + "s");
+
             } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | InterruptedException ex) {
                 LogUtil.fatal(AudioUtil.class, ex.getMessage());
             }
         }).start();
     }
+
     public static void loop(String audio, int timeMs) {
         new Thread(() -> {
             try {
-                LogUtil.debug(AudioUtil.class, "Reproduzindo: "+audio);
-                InputStream inputStream = new FileInputStream("./"+AUDIO_FOLDER+"/"+audio);
+                LogUtil.debug(AudioUtil.class, "Reproduzindo: " + audio);
+                InputStream inputStream = new FileInputStream("./" + AUDIO_FOLDER + "/" + audio);
                 InputStream bufferedIn = new BufferedInputStream(inputStream);
                 AudioInputStream sound = AudioSystem.getAudioInputStream(inputStream);
                 DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
                 Clip clip = (Clip) AudioSystem.getLine(info);
                 clip.open(sound);
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
-                long time = new Double(Math.ceil(clip.getMicrosecondLength()/1000)).longValue();
+                long time = new Double(Math.ceil(clip.getMicrosecondLength() / 1000)).longValue();
                 Thread.sleep(timeMs);
                 clip.stop();
-                LogUtil.debug(AudioUtil.class, "Tempo do audio: "+time/1000+"s");
-                
+                LogUtil.debug(AudioUtil.class, "Tempo do audio: " + time / 1000 + "s");
+
             } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | InterruptedException ex) {
                 LogUtil.fatal(AudioUtil.class, ex);
             }
@@ -110,5 +112,5 @@ public class AudioUtil {
     public static void main(String[] args) {
         play(FAIL);
     }
-    
+
 }

@@ -17,12 +17,14 @@ public class Question implements Serializable {
     @GeneratedValue(generator = "generator")
     private Integer id;
     private String question;
-    private String falseAnswer1;
-    private String falseAnswer2;
-    private String falseAnswer3;
-    private String trueAnswer;
+    private String answer1;
+    private String answer2;
+    private String answer3;
+    private String answer4;
+    private int correctAnswer;
     private String subject;
-    private boolean selected;
+    private int questionLevel;
+    private int selected;
 
     public Question() {
     }
@@ -48,36 +50,44 @@ public class Question implements Serializable {
         this.question = question;
     }
 
-    public String getFalseAnswer1() {
-        return falseAnswer1;
+    public String getAnswer1() {
+        return answer1;
     }
 
-    public void setFalseAnswer1(String falseAnswer1) {
-        this.falseAnswer1 = falseAnswer1;
+    public void setAnswer1(String answer1) {
+        this.answer1 = answer1;
     }
 
-    public String getFalseAnswer2() {
-        return falseAnswer2;
+    public String getAnswer2() {
+        return answer2;
     }
 
-    public void setFalseAnswer2(String falseAnswer2) {
-        this.falseAnswer2 = falseAnswer2;
+    public void setAnswer2(String answer2) {
+        this.answer2 = answer2;
     }
 
-    public String getFalseAnswer3() {
-        return falseAnswer3;
+    public String getAnswer3() {
+        return answer3;
     }
 
-    public void setFalseAnswer3(String falseAnswer3) {
-        this.falseAnswer3 = falseAnswer3;
+    public void setAnswer3(String answer3) {
+        this.answer3 = answer3;
     }
 
-    public String getTrueAnswer() {
-        return trueAnswer;
+    public String getAnswer4() {
+        return answer4;
     }
 
-    public void setTrueAnswer(String trueAnswer) {
-        this.trueAnswer = trueAnswer;
+    public void setAnswer4(String answer4) {
+        this.answer4 = answer4;
+    }
+
+    public int getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(int correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     public String getSubject() {
@@ -88,11 +98,19 @@ public class Question implements Serializable {
         this.subject = subject;
     }
 
-    public boolean isSelected() {
+    public int getQuestionLevel() {
+        return questionLevel;
+    }
+
+    public void setQuestionLevel(int questionLevel) {
+        this.questionLevel = questionLevel;
+    }
+    
+    public int getSelected() {
         return selected;
     }
 
-    public void setSelected(boolean selected) {
+    public void setSelected(int selected) {
         this.selected = selected;
     }
 

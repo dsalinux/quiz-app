@@ -5,12 +5,12 @@
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.SQLiteDialect</property>
     <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
-    <property name="hibernate.connection.url">jdbc:sqlite:./teste.sqlite</property>
+    <property name="hibernate.connection.url">jdbc:sqlite:./quizapp.sqlite</property>
     <property name="current_session_context_class">thread</property> 
     <property name="hibernate.enable_lazy_load_no_trans">true</property>
 <!--    <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">root</property>-->
-    <property name="hibernate.hbm2ddl.auto">create</property>
+    <!--<property name="hibernate.hbm2ddl.auto">create</property>-->
     
     <mapping class="br.com.professordanilo.quizapp.entity.Event"/>
     <mapping class="br.com.professordanilo.quizapp.entity.Fight"/>

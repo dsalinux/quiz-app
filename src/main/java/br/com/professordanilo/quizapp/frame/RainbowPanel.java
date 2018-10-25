@@ -14,7 +14,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Action;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
@@ -80,7 +79,6 @@ public class RainbowPanel extends JLabel {
                 new float[]{0f, 0.5f, 1f},
                 new Color[]{cor1, cor2, cor3});
         g2d.setPaint(lgp);
-        
         g2d.fill(new Rectangle(0, 0, getWidth(), getHeight()));
         addColor();
         super.paintComponent(gr);

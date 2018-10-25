@@ -2,6 +2,7 @@ package br.com.professordanilo.quizapp.logic;
 
 import br.com.professordanilo.quizapp.entity.Question;
 import br.com.professordanilo.quizapp.util.ContextDAO;
+import br.com.professordanilo.quizapp.util.StringHelper;
 import br.com.professordanilo.quizapp.util.exception.BusinessException;
 import br.com.professordanilo.quizapp.util.exception.SystemException;
 import java.util.List;
@@ -39,4 +40,20 @@ public class QuestionLogic implements GenericLogic<Question, Integer>{
         return ContextDAO.getQuestionDAO().findByExample(entity, new String[]{"name"});
     }
     
+    public List<String> findSubjects(){
+        return ContextDAO.getQuestionDAO().findSubjects();
+    }
+    public List<Integer> findQuestionLevels(){
+        return ContextDAO.getQuestionDAO().findQuestionLevels();
+    }
+    
+    public Question selectRandomQuestion(List<String> subjects, Integer questionLevel) throws BusinessException{
+        if(subjects == null || subjects.size() < 1){
+            throw new BusinessException("Selecione ao menos 1 conteúdo para as questões.");
+        }
+        if(questionLevel == null){
+            throw new BusinessException("Selecione o nível da pergunta sorteada.");
+        }
+        return ContextDAO.getQuestionDAO().selectRandomQuestion(subjects, questionLevel);
+    }
 }

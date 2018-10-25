@@ -14,4 +14,6 @@ import java.io.Serializable;
  */
 public class PlayerDAO extends GenericDAO<Player, Integer> implements Serializable{
     
+    private static final long serialVersionUID = -3120201060803765567L;
+    
 }
