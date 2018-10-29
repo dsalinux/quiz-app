@@ -79,6 +79,7 @@ public class QuizProjectionFrm extends JFrame {
         panelQuiz = new JPanel(new BorderLayout());
         panelQuiz.setPreferredSize(getPreferredSize());
         questionLabel.setText("");
+        questionLabel.setForeground(Color.WHITE);
 
         panelQuestions = new JPanel();
         panelQuestions.setOpaque(true);
@@ -93,6 +94,7 @@ public class QuizProjectionFrm extends JFrame {
         for (AnswerLabel resposta : respostas) {
             resposta.setText("");
             resposta.setHorizontalAlignment(JLabel.LEADING);
+            resposta.setForeground(Color.WHITE);
         }
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;

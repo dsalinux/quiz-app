@@ -443,7 +443,9 @@ public class QuizManager extends javax.swing.JFrame {
         btnProjectAnswers.setEnabled(false);
         btnEndQuestion.setEnabled(false);
         btnProjectStopwatch.setEnabled(false);
-        btnProjectPlayers.setEnabled(false);
+        if(listPlayers.getModel().getSize() < 2){
+            btnProjectPlayers.setEnabled(false);
+        }
     }
 
     /**
@@ -1584,7 +1586,7 @@ public class QuizManager extends javax.swing.JFrame {
         question = null;
         resetButtonsProjection();
         updateQuestion();
-        listPlayers.removeSelectionInterval(0, listPlayers.getModel().getSize());
+//        listPlayers.removeSelectionInterval(0, listPlayers.getModel().getSize());
     }//GEN-LAST:event_btnEndQuestionActionPerformed
 
     private void txtAnswer1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtAnswer1MouseClicked

@@ -31,13 +31,16 @@ public class AnswerLabel extends JLabel {
     private Color correctColor2 = new Color(0, 180, 60);
     private Color incorrectColor1 = new Color(255, 0, 140);
     private Color incorrectColor2 = new Color(180, 0, 60);
+    private Color animationColor1;
+    private Color animationColor2;
     private int radius = 40;
     private CompoundBorder border = new CompoundBorder(new EmptyBorder(5, 5, 5, 5), new RoundedBorder(radius,defaultColor1));
     private Color[] colors = new Color[]{defaultColor1, defaultColor2};
     private boolean selected = false;
 
     private Timer animationTimer;
-    private int animationDelay = 300, countAnimationsCorrectQuestion = 0, countAnimationsIncorrectQuestion = 0;
+    private int animationDelay = 500, countAnimation = 0;
+    private int correct = 0;
     
     public AnswerLabel() {
         super();
@@ -66,49 +69,38 @@ public class AnswerLabel extends JLabel {
     
     public void showIncorrect(){
         AudioUtil.play(AudioUtil.FAIL);
-        startAnimationIncorrectQuestion();
+        correct = 1;
+        startAnimation();
     }
     
     public void showCorrect(){
         AudioUtil.play(AudioUtil.SUCCESS);
-        startAnimationCorrectQuestion();
+        correct = 0;
+        startAnimation();
     }
     
-    private void startAnimationIncorrectQuestion(){
+    private void startAnimation(){
         if(animationTimer == null){
             animationTimer = new Timer(animationDelay, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(countAnimationsIncorrectQuestion > 15){
-                        countAnimationsIncorrectQuestion = 0;
-                        repaint();
-                        stopAnimation();
-                        LogUtil.error(AnswerLabel.class, countAnimationsIncorrectQuestion+" - É pra ser 0");
-                        return;
-                    }
-                    countAnimationsIncorrectQuestion++;
-                    repaint();
-                }
-            });
-            animationTimer.start();
-        } else {
-            if(!animationTimer.isRunning()){
-                animationTimer.restart();
-            }
-        }
-    }
-    private void startAnimationCorrectQuestion(){
-        if(animationTimer == null){
-            animationTimer = new Timer(animationDelay, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(countAnimationsCorrectQuestion > 15){
-                        countAnimationsCorrectQuestion = 0;
+                    if(countAnimation > 10){
+                        countAnimation = 0;
                         repaint();
                         stopAnimation();
                         return;
                     }
-                    countAnimationsCorrectQuestion++;
+                    switch (correct) {
+                        case 0:
+                            animationColor1 = correctColor1;
+                            animationColor2 = correctColor2;
+                            break;
+                        case 1:
+                            animationColor1 = incorrectColor1;
+                            animationColor2 = incorrectColor2;
+                            break;
+                    }
+                    countAnimation++;
                     repaint();
                 }
             });
@@ -128,15 +120,9 @@ public class AnswerLabel extends JLabel {
         Graphics2D g2d = (Graphics2D) gr.create();
         Map<RenderingHints.Key, Object> map = new HashMap<>();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        if(countAnimationsCorrectQuestion>0){
-            if(countAnimationsCorrectQuestion%2==1){
-                colors = new Color[]{correctColor1, correctColor2};
-            } else {
-                colors = new Color[]{defaultColor1, defaultColor2};
-            }
-        } else if(countAnimationsIncorrectQuestion > 0){
-            if(countAnimationsIncorrectQuestion%2==1){
-                colors = new Color[]{incorrectColor1, incorrectColor2};
+        if(countAnimation>0){
+            if(countAnimation%2==1){
+                colors = new Color[]{animationColor1, animationColor2};
             } else {
                 colors = new Color[]{defaultColor1, defaultColor2};
             }

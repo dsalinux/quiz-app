@@ -80,6 +80,10 @@ public class AudioUtil {
                 long time = new Double(Math.ceil(clip.getMicrosecondLength() / 1000)).longValue();
                 Thread.sleep(time);
                 clip.stop();
+                clip.close();
+                sound.close();
+                bufferedIn.close();
+                inputStream.close();
                 LogUtil.debug(AudioUtil.class, "Tempo do audio: " + time / 1000 + "s");
 
             } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | InterruptedException ex) {
@@ -103,6 +107,10 @@ public class AudioUtil {
                 long time = new Double(Math.ceil(clip.getMicrosecondLength() / 1000)).longValue();
                 Thread.sleep(timeMs);
                 clip.stop();
+                clip.close();
+                sound.close();
+                bufferedIn.close();
+                inputStream.close();
                 LogUtil.debug(AudioUtil.class, "Tempo do audio: " + time / 1000 + "s");
 
             } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | InterruptedException ex) {
