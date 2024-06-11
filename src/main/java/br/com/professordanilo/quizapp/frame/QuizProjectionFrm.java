@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 public class QuizProjectionFrm extends JFrame {
@@ -83,7 +84,7 @@ public class QuizProjectionFrm extends JFrame {
 
         panelQuestions = new JPanel();
         panelQuestions.setOpaque(true);
-        panelQuestions.setBackground(Color.white);
+        panelQuestions.setBackground(Color.black);
 //        panelQuestions.setPreferredSize(new Dimension(getWidth(), getHeight()));
 //        panelQuestions.add(questionLabel, BorderLayout.CENTER);
         GridBagLayout bagLayout = new GridBagLayout();
@@ -127,8 +128,8 @@ public class QuizProjectionFrm extends JFrame {
             panelCabecalho = new JPanel(new GridBagLayout());
             panelCabecalho.setPreferredSize(new Dimension(300, 130));
             panelCabecalho.setOpaque(true);
-            panelCabecalho.setBackground(Color.white);
-            panelCabecalho.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.LIGHT_GRAY));
+            panelCabecalho.setBackground(Color.black);
+            panelCabecalho.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.black));
 //            MatteBorder linha = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.lightGray);
 //            panelCabecalho.setBorder(linha);
             InputStream is;
@@ -150,7 +151,7 @@ public class QuizProjectionFrm extends JFrame {
 
     private void createPanelPlayers() {
         panelInfoPlayers = new JPanel(new GridLayout(3, 1));
-        panelInfoPlayers.setBackground(new Color(240, 240, 240));
+        panelInfoPlayers.setBackground(Color.black);
         panelInfoPlayers.setOpaque(true);
         createPanelHead(panelInfoPlayers);
 //        panelCompetidores.setBackground(Color.white);
@@ -161,14 +162,14 @@ public class QuizProjectionFrm extends JFrame {
 
         player1 = new JLabel("<html><body><h2></h2></body></html>");
         player1.setIcon(null);
-        player1.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.LIGHT_GRAY));
+        player1.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.black));
         player1.setPreferredSize(new Dimension(300, 100));
         player1.setHorizontalAlignment(JLabel.CENTER);
         player1.setHorizontalTextPosition(JLabel.CENTER);
         player1.setVerticalTextPosition(JLabel.BOTTOM);
         panelInfoPlayers.add(player1);
         player2 = new JLabel("<html><body><h2></h2></body></html>");
-        player2.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.LIGHT_GRAY));
+        player2.setBorder(new MatteBorder(new Insets(0, 0, 0, 15), Color.black));
         player2.setIcon(null);
         player2.setHorizontalAlignment(JLabel.CENTER);
         player2.setHorizontalTextPosition(JLabel.CENTER);
@@ -205,7 +206,7 @@ public class QuizProjectionFrm extends JFrame {
 
             aguarde.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
             aguarde.setOpaque(true);
-            aguarde.setBackground(Color.white);
+            aguarde.setBackground(Color.DARK_GRAY);
             aguarde.setHorizontalAlignment(JLabel.CENTER);
             aguarde.setHorizontalTextPosition(JLabel.CENTER);
             aguarde.setVerticalTextPosition(JLabel.BOTTOM);
@@ -216,7 +217,10 @@ public class QuizProjectionFrm extends JFrame {
                 is = getClass().getResourceAsStream("/br/com/professordanilo/quizapp/images/logo.png");
             }
             BufferedImage bImage = ImageIO.read(is);
-            aguarde.setIcon(new ImageIcon(ImageUtil.resizeToMaxValue(bImage, 260, 260)));
+//            int size = getContentPane().getWidth()<getContentPane().getHeight()?getContentPane().getWidth():getContentPane().getHeight();
+//            size = (int) (size * 0.8);
+            int size = 700;
+            aguarde.setIcon(new ImageIcon(ImageUtil.resizeToMaxValue(bImage, size, size)));
 
             panelAguardando.add(aguarde, BorderLayout.CENTER);
 
@@ -234,8 +238,52 @@ public class QuizProjectionFrm extends JFrame {
     }
 
     private void updateQuestion() {
+        int qtQuestao = question.getQuestion().length();
+        int tamanho = fontSize(qtQuestao);
+        String htmlTagInit = "<html><p \"line-height:1\" style=\"font:"+ tamanho+"px;\" align=\"JUSTIFY\">";
         questionLabel.setText(htmlTagInit+question.getQuestion()+htmlTagClose);
 
+    }
+    
+    private int fontSize(int questionLength){
+        int tamanho = 24;
+        int base = 8;
+        if(questionLength > 1500) {
+            tamanho = base;
+        } else if(questionLength > 1000) {
+            tamanho = Double.valueOf(base * 1.1).intValue();
+        } else if(questionLength > 900) {
+            tamanho = Double.valueOf(base * 1.2).intValue();
+        } else if(questionLength > 850) {
+            tamanho = Double.valueOf(base * 1.3).intValue();
+        } else if(questionLength > 800) {
+            tamanho = Double.valueOf(base * 1.4).intValue();
+        } else if(questionLength > 750) {
+            tamanho = Double.valueOf(base * 1.5).intValue();
+        } else if(questionLength > 700) {
+            tamanho = Double.valueOf(base * 1.6).intValue();
+        } else if(questionLength > 650) {
+            tamanho = Double.valueOf(base * 1.7).intValue();
+        } else if(questionLength > 600) {
+            tamanho = Double.valueOf(base * 1.8).intValue();
+        } else if(questionLength > 550) {
+            tamanho = Double.valueOf(base * 1.9).intValue();
+        } else if(questionLength > 500) {
+            tamanho = Double.valueOf(base * 2.0).intValue();
+        } else if(questionLength > 450) {
+            tamanho = Double.valueOf(base * 2.1).intValue();
+        } else if(questionLength > 400) {
+            tamanho = Double.valueOf(base * 2.2).intValue();
+        } else if(questionLength > 350) {
+            tamanho = Double.valueOf(base * 2.3).intValue();
+        } else if(questionLength > 300) {
+            tamanho = Double.valueOf(base * 2.4).intValue();
+        } else if(questionLength > 250) {
+            tamanho = Double.valueOf(base * 2.5).intValue();
+        } else if(questionLength > 200) {
+            tamanho = Double.valueOf(base * 2.6).intValue();
+        }
+        return tamanho;
     }
 
     private void updateAnswer() {

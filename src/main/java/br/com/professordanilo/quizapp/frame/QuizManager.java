@@ -437,15 +437,15 @@ public class QuizManager extends javax.swing.JFrame {
     }
     
     private void resetButtonsProjection(){
-        btnSelectQuestion.setEnabled(false);
+        btnSelectQuestion.setEnabled(true);
         btnCheckAnswer.setEnabled(false);
         btnProjectQuestion.setEnabled(false);
         btnProjectAnswers.setEnabled(false);
         btnEndQuestion.setEnabled(false);
         btnProjectStopwatch.setEnabled(false);
-        if(listPlayers.getModel().getSize() < 2){
-            btnProjectPlayers.setEnabled(false);
-        }
+        //if(listPlayers.getModel().getSize() < 2){
+            btnProjectPlayers.setEnabled(true);
+        //}
     }
 
     /**
@@ -1526,7 +1526,7 @@ public class QuizManager extends javax.swing.JFrame {
 
     private void btnSelectTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectTournamentActionPerformed
         tournament = (Tournament) tblTournament.getModel().getValueAt(tblTournament.getSelectedRow(), 0);
-        changeFrameState(QuizManagerState.EDIT_TOURNAMENT);
+        changeFrameState(QuizManagerState.BATTLE);
     }//GEN-LAST:event_btnSelectTournamentActionPerformed
 
     private void txtNameTournamentFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameTournamentFocusLost
@@ -1613,6 +1613,7 @@ public class QuizManager extends javax.swing.JFrame {
         btnProjectAnswers.setEnabled(true);
         btnEndQuestion.setEnabled(true);
         quizProjectionFrm.startProjectionQuest(question);
+        btnProjectAnswersActionPerformed(null); 
     }//GEN-LAST:event_btnProjectQuestionActionPerformed
 
     private void btnProjectAnswersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjectAnswersActionPerformed
@@ -1650,10 +1651,10 @@ public class QuizManager extends javax.swing.JFrame {
 
     private void btnProjectPlayersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjectPlayersActionPerformed
         List<Player> players = listPlayers.getSelectedValuesList();
-        if(players == null || players.size() < 2){
-            return;
-        }
-        quizProjectionFrm.updatePlayers(players.get(0), players.get(1));
+//        if(players == null || players.size() < 2){
+//            return;
+//        }
+//        quizProjectionFrm.updatePlayers(players.get(0), players.get(1));
         btnSelectQuestion.setEnabled(true);
     }//GEN-LAST:event_btnProjectPlayersActionPerformed
 

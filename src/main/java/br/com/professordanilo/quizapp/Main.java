@@ -21,19 +21,20 @@ public class Main {
     public static void main(String[] args) {
         
         try {
-            Map<String, LookAndFeelInfo> lafs = new HashMap<>();
-            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("GTK+".equals(info.getName())) {
-                    lafs.put("GTK+",info);
-                } else if("Nimbus".equals(info.getName())){
-                    lafs.put("Nimbus",info);
-                }
-            }
-            if(lafs.containsKey("GTK+")){
-                UIManager.setLookAndFeel(lafs.get("GTK+").getClassName());
-            } else if(lafs.containsKey("Nimbus")){
-                UIManager.setLookAndFeel(lafs.get("Nimbus").getClassName());
-            }
+//            Map<String, LookAndFeelInfo> lafs = new HashMap<>();
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//                if ("GTK+".equals(info.getName())) {
+//                    lafs.put("GTK+",info);
+//                } else if("Nimbus".equals(info.getName())){
+//                    lafs.put("Nimbus",info);
+//                }
+//            }
+//            if(lafs.containsKey("GTK+")){
+//                UIManager.setLookAndFeel(lafs.get("GTK+").getClassName());
+//            } else if(lafs.containsKey("Nimbus")){
+//                UIManager.setLookAndFeel(lafs.get("Nimbus").getClassName());
+//            }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             LogUtil.error(Main.class, ex.getMessage());
         }
